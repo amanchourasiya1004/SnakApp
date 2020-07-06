@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Main</title>
+</head>
+<body>
+    <div class='chats'>
+
+    </div>
+    <a href="{% url 'GroupParticipants' %}">Create a group</a><br>
+    <a href="{% url 'SearchView' %}">Search</a><br>
+    <a href="#">Invite</a><br>
+    <a href="{% url 'LogoutView' %}">Logout</a><br>
+    <script>
+        var chat = JSON.parse("{{chats|escapejs}}");
+        var a = $('.chats');
+        for(var i = 0; i < chat.length; i++){
+            a.append(
+                '<div class="msg-container"><div class="friend">' + chat[i][0] + '</div><div class="msgs">' + chat[i][1] + '</div></div><br>'
+            )
+        }
+        $('.msg-container').click(function(){
+            var name = $($(this).children($('.friend'))[0]).text();
+            console.log(name)
+            window.location.pathname = '/main/personalchat/' + name + '/';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+</head>
+<body>
+    <form action="{% url 'SearchView' %}" id = "searchform">
+        <input type="text" id = 'search'>
+        <button type = 'submit'>Search</button>
+    </form>
+    
+    <div class="search-result">
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function personal(e){
+            console.log("running");
+            var otheruser = $(e).text();
+            console.log(otheruser);
+            window.location.pathname = '/main/personalchat/' + otheruser + '/';
+        }
+        $('#search').keyup(function(){
+            var name;
+            const query = $(this).val();
+            $.ajax({
+                type : 'GET',
+                url : "{% url 'SearchView' %}",
+                data : {'search' : query},
+                success : function(response){
+                    var queryset = JSON.parse(response['result']);
+                    $('.search-result').empty();
+                    for(var i = 0; i < queryset.length; i++){
+                        name = queryset[i]['fields']['username'];
+                        $('.search-result').append(
+                            '<div class="add-friend" onclick="personal(this);">' + name + '</div>'
+                        );
+                    }
+                    if(response['length'] == 0){
+                        console.log('No items Matched!!');
+                    }
+                },
+                error : function(response){
+                    console.log("something bad");
+                }
+            });
+            $('.add-friend').click(function(){
+
+            });
+        });
+        
+    </script>
+</body>
+</html>

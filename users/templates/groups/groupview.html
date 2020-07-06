@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="message-body">
+
+    </div>
+    <input type="text" id="msg-input">
+    <button id = 'msg-submit'>Send</button>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var groupname = "{{groupname|escapejs}}"
+        console.log(groupname)
+        const messageBody = $(".message-body");
+        const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/" + groupname + "/");
+        var username = "{{user|escapejs}}"
+        socket.onmessage = function(e){
+            const data = JSON.parse(e.data);
+            sender = data.user;
+            var user = data.user;
+            console.log(user);
+            console.log(username);
+            $(".message-body").append(
+                "<div>" + user + " : " + data.message + "</div>"
+            );
+            
+        }
+        socket.onclose = function(e){
+            console.error("Chat Socket closed unexpectedly");
+        }
+
+        $("#msg-input").focus();
+        $("#msg-input").keyup(function(e){
+            if(e.keyCode === 13){
+                $("#msg-submit").click();
+            }
+        });
+        $("#msg-submit").click(function(e){
+            const messageDOM = $("#msg-input");
+            const message = messageDOM.val();
+            
+            socket.send(JSON.stringify({
+                'message' : message
+            }));
+            messageDOM.val('');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>Personal Chat</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        {% if len == 0 %}
+            <div></div>
+        {% else %}
+            {% for i in msgs %}
+                <div>{{i.chat}}</div>
+            {% endfor %}
+        {% endif %}
+        <div id = 'msg-box' name = 'msg-box'></div>
+        <br><br><br>
+        <input type = "text" name = 'msg-input' id = 'msg-input'>
+        <input type = 'button' value = "Message" id = "msg-submit">      
+        {{otheruser|json_script:"user"}} 
+        {{me|json_script:"me"}}
+        {{request.user}}
+        
+    </body>
+    <script>
+        const me = JSON.parse(document.getElementById("me").textContent);
+        const otheruser = JSON.parse(document.getElementById("user").textContent);
+        const socket = new WebSocket("ws://" + window.location.host + "/ws/personal/chat/" + otheruser +"/");
+
+        socket.onmessage = function(e){
+            const data = JSON.parse(e.data);
+            if(data.sender == me){
+                sender = "You";
+            }
+            else{
+                sender = data.sender;
+            }
+            var msg = sender + " : " + data.message + '\n';
+            $("#msg-box").append(msg);
+        }
+        socket.onclose = function(e){
+            console.error("Chat Socket closed unexpectedly");
+        }
+
+        $("#msg-input").focus();
+        $("#msg-input").keyup(function(e){
+            if(e.keyCode === 13){
+                $("#msg-submit").click();
+            }
+        });
+        $("#msg-submit").click(function(e){
+            const messageDOM = $("#msg-input");
+            const message = messageDOM.val();
+            
+            socket.send(JSON.stringify({
+                'message' : message
+            }));
+            messageDOM.val('');
+        });
+        function sort(s1, s2){
+            
+        }
+    </script>
+    </html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+</head>
+<body>
+    <form action="{% url 'SearchView' %}" id = "searchform">
+        <input type="text" id = 'search'>
+        <button type = 'submit'>Search</button>
+    </form>
+    <div class="add-participants">
+    </div>
+    <div class="search-result">
+
+    </div>
+    <button class="create">Create Group</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $('.create').click(function(){
+            var all = $('.participants').map(function(){
+                return $(this).text();
+            }).get();
+            $.ajax({
+                type : 'GET',
+                url : '{% url "GroupParticipants" %}',
+                data : {'participants[]' : all},
+                success :  function(response){
+                    console.log("Yo")
+                    window.location.pathname = 'main/group/detail'
+                },
+                error : function(response){
+                    console.log("something bad");
+                }
+            });
+        });
+        function personal(e){
+            var otheruser = $(e).text();
+            $('.add-participants').append(
+                '<div class="participants">' + otheruser + '</div>'
+            );
+        }
+        $('#search').keyup(function(){
+            var name;
+            const query = $(this).val();
+            $.ajax({
+                type : 'GET',
+                url : "{% url 'SearchView' %}",
+                data : {'search' : query},
+                success : function(response){
+                    var queryset = JSON.parse(response['result']);
+                    $('.search-result').empty();
+                    for(var i = 0; i < queryset.length; i++){
+                        name = queryset[i]['fields']['username'];
+                        $('.search-result').append(
+                            '<div class="add-friend" onclick="personal(this);">' + name + '</div>'
+                        );
+                    }
+                    if(response['length'] == 0){
+                        console.log('No items Matched!!');
+                    }
+                },
+                error : function(response){
+                    console.log("something bad");
+                }
+            });
+            
+        });
+        
+    </script>
+</body>
+</html>

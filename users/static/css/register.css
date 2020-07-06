@@ -1,0 +1,7 @@
+.search-container{
+    width: 100%;
+    margin-top: 18px;
+}
+.search-res::placeholder{
+    color: rgba(0, 0, 0 , 0.6);
+}
