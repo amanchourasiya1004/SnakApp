@@ -4,16 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
+    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/home.css">
+    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/home_2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <title>Main</title>
 </head>
 <body>
-    <div class='chats'>
-
+    <div class="sidebar">
+        <div class="sidebar-panel">
+            <div class="userinformation">
+                <div class="greenbox">
+                    <div class="user text-center">AC</div>
+                </div>
+                <div class="username">Aman Kumar Chourasiya</div>
+                <div class="email-sidebar">amanchourasiya1004@gmail.com</div>
+            </div>
+            <div class="utilities">
+                <div class="options">Notifications</div>
+                <div class="options">Payment options</div>
+                <div class="options">Reviews</div>
+                <div class="options">Contribute</div>
+                <div class="options">Your Orders</div>
+            </div>
+        </div>
     </div>
-    <a href="{% url 'GroupParticipants' %}">Create a group</a><br>
+    <nav class="navbar bg-custom navbar-expand-xs fixed-top navbar-default">
+        <div class="hamburger d-flex">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+            <div class="brand">SnakApp</div>
+        </div>
+        
+            <div class="headicons">
+                <i class="fa fa-search"></i>
+            </div>
+    </nav>
+
+    <!-- No chats section start -->
+    <!-- <div class='chats text-center'>
+        <div class="icon">
+            <i class="fas fa-comment-slash"></i>
+        </div>
+        <div class="nofriends">
+            No Chats!
+        </div>
+        <div class="search-div">
+            <button class="search">Search</button>
+            <button class="invite">Invite</button>
+        </div>
+        <div class="create">
+            <button class="creategroup">Create New Group</button>
+        </div>
+    </div> -->
+
+    <!-- No Chats section end -->
+
+    <div class="message-box">
+        
+        <div class="messages d-flex">
+            <span class="user-icon">
+                <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
+            </span>
+            <div class="user-data align-self-start">
+                <div class="user-name">Nandini</div>
+                <div class="lastmsg">I love you jaan..</div>
+            </div>
+            <div class="lasttime">
+                8:09 pm
+            </div>
+            <div class="duemsg">
+                <div class="pending text-center">2</div>
+            </div>
+        </div>
+        <div class="messages d-flex">
+            <span class="user-icon">
+                <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
+            </span>
+            <div class="user-data align-self-start">
+                <div class="user-name">Captain</div>
+                <div class="lastmsg">Kaisa hai be harami</div>
+            </div>
+            <div class="lasttime">
+                8:09 pm
+            </div>
+            <div class="duemsg">
+                <div class="pending text-center">3</div>
+            </div>
+        </div>
+    </div>
+    <!-- <a href="{% url 'GroupParticipants' %}">Create a group</a><br>
     <a href="{% url 'SearchView' %}">Search</a><br>
     <a href="#">Invite</a><br>
-    <a href="{% url 'LogoutView' %}">Logout</a><br>
+    <a href="{% url 'LogoutView' %}">Logout</a><br> -->
+
+    <script>
+        $('.fa-bars').click(function(){
+            $('.sidebar').css({"width" : '77%'});
+        })
+        document.onclick = function(event){
+            if (event===undefined) event= window.event;
+            var target= 'target' in event? event.target : event.srcElement;
+            if(target.className != 'sidebar' && target.className != 'hamburger d-flex' && target.className != 'fa fa-bars'){
+                $('.sidebar').css({"width" : '0%'});
+            }
+        }
+    </script>
     <script>
         var chat = JSON.parse("{{chats|escapejs}}");
         var a = $('.chats');
@@ -27,6 +124,7 @@
             console.log(name)
             window.location.pathname = '/main/personalchat/' + name + '/';
         });
+
     </script>
 </body>
 </html>

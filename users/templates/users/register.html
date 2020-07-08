@@ -10,40 +10,51 @@
     <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/register.css">
 </head>
 <body>
-    <div class="welcome">
+    <div class="welcome text-center">
         Welcome to SnakApp
     </div>
-    <div class="signup">
-        Sign up to continue
-    </div>
-    <div class="form-section">
-        <form action="{% url 'RegisterView' %}" method="POST">
-            <!-- {% csrf_token %} -->
-            <div class='search-container d-flex justify-content-center'>
-                <div class="iconwrap d-flex">
-                    <input type="text" name = 'username' placeholder="Username" class="align-self-center search-res">
-                </div>
+    <div class="form-wrapper">
+        <div class="signup text-center">
+            Sign up to continue
+        </div>
+        <form action="" class="form">
+            <div class="form-group">
+            <label class="form-label" for="first">Username</label>
+            <input id="first" class="form-input" type="text" name = 'username'/>
             </div>
-            <div class='search-container d-flex justify-content-center'>
-                <div class="iconwrap d-flex">
-                    <input type="text" name = 'email' placeholder="Email" class="align-self-center search-res">
-                </div>
+            <div class="form-group">
+            <label class="form-label" for="last">Email</label>
+            <input id="last" class="form-input" type="text" name='email'/>
             </div>
-            <div class='search-container d-flex justify-content-center'>
-                <div class="iconwrap d-flex">
-                    <input type="text" name = 'password' placeholder="Password" class="align-self-center search-res">
-                </div>
+            <div class="form-group">
+            <label class="form-label" for="color">Password</label>
+            <input id="color" class="form-input" type="text" name='password'/>
             </div>
-            <div class="form-input">
-                <button type="submit">Submit</button>
+            <div class="input-group border-less justify-content-center">
+            <button type="submit" class="btn-signup-initial">Sign Up</button>
             </div>
         </form>
     </div>
-    <div class="already">
-        <span>Already registered ?</span><a href="{% url 'LoginView' %}" class="login">Sign in</a>
+    <div class="already text-center">
+        <span>Already registered ? </span><a href="{% url 'LoginView' %}" class="login">Sign in</a>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script>
+        $('input').focus(function(){
+            $(this).parents('.form-group').addClass('focused');
+        });
+
+        $('input').blur(function(){
+        var inputValue = $(this).val();
+        if ( inputValue == "" ) {
+            $(this).parents('.form-group').removeClass('focused');
+            $(this).removeClass('filled');
+        } else {
+            $(this).addClass('filled');
+        }
+        });
+    </script>
 </body>
 </html>
