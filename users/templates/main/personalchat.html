@@ -1,10 +1,105 @@
-<html>
-    <head>
-        <title>Personal Chat</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    </head>
-    <body>
-        {% if len == 0 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
+    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/personalchat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <title>PersonalChat</title>
+</head>
+<body>
+    <nav class="navbar bg-custom navbar-expand-xs fixed-top navbar-default">
+        <div class="hamburger d-flex">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            <span class="user-icon">
+                <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
+            </span>
+            <div class="brand">Nandini</div>
+        </div>
+        
+            <div class="headicons">
+                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </div>
+    </nav>
+    <div class="message-store">
+        <div class="msg-input-div">
+            <div class="msg-send-box">
+                <div class="emoji">
+                    <i class='far fa-grin' style='font-size:24px'></i>
+                </div>
+                <div style="display: inline-block; width: 86%;">
+                    <input type="text" class="msg-send" placeholder="Type here..." id = "msg-input">
+                </div>
+                <!-- <i class="fas fa-camera icons"></i>
+                <i class="fa fa-thumbs-up icons" aria-hidden="true"></i>
+                <i class="fa fa-paper-plane icons" aria-hidden="true" id = "msg-submit"></i> -->
+            </div>
+        </div>
+        <div class="message-body">
+            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
+                <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
+                    <div class="message-wrap-user">
+                        Hi jaan
+                    </div>
+                </div>
+            </div>
+            <div class="message-wrap-three-dots">
+                <div class="message-wrap-with-icon">
+                    <div class="message-wrap">
+                        I love you jaan. 
+                    </div>
+                </div>
+            </div>
+            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
+                <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
+                    <div class="message-wrap-user">
+                        Hi jaan
+                    </div>
+                </div>
+            </div>
+            <div class="message-wrap-three-dots">
+                <div class="message-wrap-with-icon">
+                    <div class="message-wrap">
+                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
+                    </div>
+                </div>
+            </div>
+            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
+                <div class="message-wrap-with-icon-user">
+                    <div class="message-wrap-user">
+                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
+                    </div>
+                </div>
+            </div>
+            <div class="message-wrap-three-dots">
+                <div class="message-wrap-with-icon">
+                    <div class="message-wrap">
+                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
+                    </div>
+                </div>
+            </div>
+            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
+                <div class="message-wrap-with-icon-user">
+                    <div class="message-wrap-user">
+                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
+                    </div>
+                </div>
+            </div>
+            <div class="message-wrap-three-dots">
+                <div class="message-wrap-with-icon">
+                    <div class="message-wrap">
+                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- {% if len == 0 %}
             <div></div>
         {% else %}
             {% for i in msgs %}
@@ -17,9 +112,8 @@
         <input type = 'button' value = "Message" id = "msg-submit">      
         {{otheruser|json_script:"user"}} 
         {{me|json_script:"me"}}
-        {{request.user}}
-        
-    </body>
+        {{request.user}} -->
+
     <script>
         const me = JSON.parse(document.getElementById("me").textContent);
         const otheruser = JSON.parse(document.getElementById("user").textContent);
@@ -59,4 +153,5 @@
             
         }
     </script>
-    </html>
+</body>
+</html>

@@ -27,6 +27,10 @@ body{
     font-size: 29px !important;
     color: white;
 }
+.fa-arrow-left{
+    font-size: 23px !important;
+    color: white;
+}
 .hamburger{
     display: inline;
 }
@@ -115,7 +119,8 @@ button{
     outline: none !important;
     background: transparent !important;
     border: none !important;
-    background: #09212e !important;
+    /* background: #09212e !important; */
+    background: #283e4a !important;
     color: white;
     margin: 10px;
     padding: 10px;

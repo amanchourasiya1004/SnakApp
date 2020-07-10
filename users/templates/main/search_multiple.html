@@ -4,18 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search</title>
+    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/search_single.css">
+    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/search_multiple.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <form action="{% url 'SearchView' %}" id = "searchform">
-        <input type="text" id = 'search'>
-        <button type = 'submit'>Search</button>
-    </form>
-    <div class="add-participants">
+    <div class='search-container d-flex justify-content-center'>
+        <div class="iconwrap d-flex">
+            <i class="fa fa-search align-self-center" aria-hidden="true"></i>
+            <form action="{% url 'SearchView' %}" id = "searchform" class="form">
+                <input type="text" placeholder="Search by Username" class="align-self-center search-res" id="search">
+            </form>
+        </div>
+    </div>
+    <div class="add-participants d-flex">
+        <div class="selected d-flex">
+            <div class="delicon text-center"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <span class="selected-name">Nandini</span>
+        </div>
+        <div class="selected d-flex">
+            <div class="delicon text-center"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <span class="selected-name">Suman Didi</span>
+        </div>
+        <div class="selected d-flex">
+            <div class="delicon text-center"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <span class="selected-name">Baby Didi</span>
+        </div>
+        <div class="selected d-flex">
+            <div class="delicon text-center"><i class="fa fa-times" aria-hidden="true"></i></div>
+            <span class="selected-name">Chourasiya</span>
+        </div>
+    </div>
+    <div class="caption">
+        Search results
     </div>
     <div class="search-result">
-
+        <div class="results d-flex">
+            <span class="user-icon">
+                <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
+            </span>
+            <div class="user-data align-self-start">
+                <div class="user-name">Nandini</div>
+                <div class="mood">Hey there I am using SnakApp</div>
+            </div>
+        </div>
+        <div class="results d-flex">
+            <span class="user-icon">
+                <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
+            </span>
+            <div class="user-data align-self-start">
+                <div class="user-name">Captain</div>
+                <div class="mood">Hey there I am using SnakApp</div>
+            </div>
+        </div>
     </div>
-    <button class="create">Create Group</button>
+    <div>
+        <button class="create">Create Group</button>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
         $('.create').click(function(){
