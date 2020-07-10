@@ -63,8 +63,8 @@ class PersonalChatConsumer(AsyncConsumer):
 
     async def websocket_connect(self, event):
         person1 = self.scope['url_route']['kwargs']['otheruser']
-        person2 = self.scope['user'].username
-        self.arr = [person1, person2]
+        self.person2 = self.scope['user'].username
+        self.arr = [person1, self.person2]
         self.arr.sort()
         self.room_group_name = self.arr[0] + 'talks' + self.arr[1]
         print(self.room_group_name)
@@ -78,7 +78,6 @@ class PersonalChatConsumer(AsyncConsumer):
 
     async def websocket_receive(self, event):
         data = event.get('text', None)
-        sender = self.scope['user'].username
         if data is not None:
             msg_data = json.loads(data)
             message = msg_data['message']
@@ -88,7 +87,7 @@ class PersonalChatConsumer(AsyncConsumer):
                 {
                     'type' : 'personalchat.message',
                     'message' : message,
-                    'sender' : sender
+                    'sender' : self.person2
                 }
             )
             
@@ -111,5 +110,5 @@ class PersonalChatConsumer(AsyncConsumer):
 
     @database_sync_to_async
     def savePersonalChats(self, message):
-        p = PersonalChats(friend = Friends.objects.get(owner__username = self.arr[0], friend__username = self.arr[1]), chat = message)
+        p = PersonalChats(friend = Friends.objects.get(owner__username = self.arr[0], friend__username = self.arr[1]), chat = message, sender = self.person2)
         p.save()

@@ -43,27 +43,27 @@
     </nav>
 
     <!-- No chats section start -->
-    <!-- <div class='chats text-center'>
-        <div class="icon">
-            <i class="fas fa-comment-slash"></i>
+    {% if length == 0 %}
+        <div class='chats text-center'>
+            <div class="icon">
+                <i class="fas fa-comment-slash"></i>
+            </div>
+            <div class="nofriends">
+                No Chats!
+            </div>
+            <div class="search-div">
+                <button class="search">Search</button>
+                <button class="invite">Invite</button>
+            </div>
+            <div class="create">
+                <button class="creategroup">Create New Group</button>
+            </div>
         </div>
-        <div class="nofriends">
-            No Chats!
-        </div>
-        <div class="search-div">
-            <button class="search">Search</button>
-            <button class="invite">Invite</button>
-        </div>
-        <div class="create">
-            <button class="creategroup">Create New Group</button>
-        </div>
-    </div> -->
-
     <!-- No Chats section end -->
-
+    {% else %}
     <div class="message-box">
         
-        <div class="messages d-flex">
+        <!-- <div class="messages d-flex">
             <span class="user-icon">
                 <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
             </span>
@@ -86,18 +86,18 @@
                 <div class="user-name">Captain</div>
                 <div class="lastmsg">Kaisa hai be harami</div>
             </div>
-            <div class="lasttime">
+            
+        </div> -->
+    </div>
+    {% endif %}
+    <!-- 
+        <div class="lasttime">
                 8:09 pm
             </div>
             <div class="duemsg">
                 <div class="pending text-center">3</div>
             </div>
-        </div>
-    </div>
-    <!-- <a href="{% url 'GroupParticipants' %}">Create a group</a><br>
-    <a href="{% url 'SearchView' %}">Search</a><br>
-    <a href="#">Invite</a><br>
-    <a href="{% url 'LogoutView' %}">Logout</a><br> -->
+     -->
 
     <script>
         $('.fa-bars').click(function(){
@@ -110,17 +110,25 @@
                 $('.sidebar').css({"width" : '0%'});
             }
         }
+        $(".search").click(function(){
+            window.location.pathname = '/main/search/username/';
+        });
+        $(".creategroup").click(function(){
+            window.location.pathname = '/main/group/participants/';
+        });
     </script>
     <script>
         var chat = JSON.parse("{{chats|escapejs}}");
-        var a = $('.chats');
+        var a = $('.message-box');
+        var userphoto;
         for(var i = 0; i < chat.length; i++){
+            userphoto = '<span class="user-icon"><img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png"></span>';
             a.append(
-                '<div class="msg-container"><div class="friend">' + chat[i][0] + '</div><div class="msgs">' + chat[i][1] + '</div></div><br>'
+                '<div class="messages d-flex">' + userphoto + '<div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
             )
         }
-        $('.msg-container').click(function(){
-            var name = $($(this).children($('.friend'))[0]).text();
+        $('.messages').click(function(){
+            var name = $($(this).children($('.user-name'))[0]).text();
             console.log(name)
             window.location.pathname = '/main/personalchat/' + name + '/';
         });

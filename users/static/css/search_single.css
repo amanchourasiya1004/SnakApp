@@ -90,4 +90,11 @@ body{
     letter-spacing: 0.2px;
     font-size: 15px !important;
 }
+.no-users{
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.7);
+    padding-left: 30px;
+    margin-top: 13px;
+    font-weight: 600;
+}
 /* results section end */

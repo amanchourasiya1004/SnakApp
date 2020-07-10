@@ -12,6 +12,7 @@ class PersonalChats(models.Model):
     friend = models.ForeignKey(Friends, on_delete = models.CASCADE, related_name='friends')
     chat = models.TextField(default='-')
     time = models.DateTimeField(auto_now_add=True)
+    sender = models.CharField(max_length = 20, default='-')
 
     class Meta:
         verbose_name_plural = 'PersonalChats'

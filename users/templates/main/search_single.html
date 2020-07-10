@@ -15,14 +15,14 @@
     <div class='search-container d-flex justify-content-center'>
         <div class="iconwrap d-flex">
             <i class="fa fa-search align-self-center" aria-hidden="true"></i>
-            <input type="text" placeholder="Search Restaurants and Cuisines" class="align-self-center search-res" id="search">
+            <input type="text" placeholder="Search by Username" class="align-self-center search-res" id="search">
         </div>
     </div>
     <div class="caption">
         Search results
     </div>
     <div class="search-result">
-        <div class="results d-flex">
+        <!-- <div class="results d-flex">
             <span class="user-icon">
                 <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
             </span>
@@ -39,17 +39,19 @@
                 <div class="user-name">Captain</div>
                 <div class="mood">Hey there I am using SnakApp</div>
             </div>
-        </div>
+        </div> -->
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
+        
         function personal(e){
             console.log("running");
-            var otheruser = $(e).text();
+            var otheruser = $($(this).children($('.user-name'))[0]).text();
             console.log(otheruser);
             window.location.pathname = '/main/personalchat/' + otheruser + '/';
         }
         $('#search').keyup(function(){
+            const me = JSON.parse("{{me|escapejs}}")
             var name;
             const query = $(this).val();
             $.ajax({
@@ -61,20 +63,24 @@
                     $('.search-result').empty();
                     for(var i = 0; i < queryset.length; i++){
                         name = queryset[i]['fields']['username'];
+                        if(name == me){
+                            console.log(me);
+                            continue;
+                        }
                         $('.search-result').append(
-                            '<div class="add-friend" onclick="personal(this);">' + name + '</div>'
+                            '<div class="results d-flex" onclick="personal(this)"><span class="user-icon"><img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png"></span><div class="user-data align-self-start"><div class="user-name">' + name + '</div><div class="mood">Hey there I am using SnakApp</div></div></div>'
                         );
                     }
                     if(response['length'] == 0){
+                        $('.search-result').append(
+                            '<div class="no-users">No Users found with this username</div>' 
+                        );
                         console.log('No items Matched!!');
                     }
                 },
                 error : function(response){
                     console.log("something bad");
                 }
-            });
-            $('.add-friend').click(function(){
-
             });
         });
         

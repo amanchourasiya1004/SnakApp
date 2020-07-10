@@ -83,13 +83,14 @@
             });
         });
         function personal(e){
-            var otheruser = $(e).text();
+            var otheruser = $($(this).children($('.user-name'))[0]).text();
             $('.add-participants').append(
-                '<div class="participants">' + otheruser + '</div>'
+                '<div class="selected d-flex"><div class="delicon text-center"><i class="fa fa-times" aria-hidden="true"></i></div><span class="selected-name">' + otheruser + '</span></div>'
             );
         }
         $('#search').keyup(function(){
             var name;
+            const me = JSON.parse("{{me|escapejs}}");
             const query = $(this).val();
             $.ajax({
                 type : 'GET',
@@ -100,11 +101,18 @@
                     $('.search-result').empty();
                     for(var i = 0; i < queryset.length; i++){
                         name = queryset[i]['fields']['username'];
+                        if(name == me){
+                            console.log(me);
+                            continue;
+                        }
                         $('.search-result').append(
-                            '<div class="add-friend" onclick="personal(this);">' + name + '</div>'
+                            '<div class="results d-flex" onclick="personal(this)"><span class="user-icon"><img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png"></span><div class="user-data align-self-start"><div class="user-name">' + name + '</div><div class="mood">Hey there I am using SnakApp</div></div></div>'
                         );
                     }
                     if(response['length'] == 0){
+                        $('.search-result').append(
+                            '<div class="no-users">No Users found with this username</div>' 
+                        );
                         console.log('No items Matched!!');
                     }
                 },

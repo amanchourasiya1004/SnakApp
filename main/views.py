@@ -34,8 +34,9 @@ def HomeView(request):
     chat = []
     for i in sorted_chat:
         chat.append([i[0], i[1]])
+    length = len(chat)
     chats = json.dumps(chat)
-    return render(request, 'main/home.html', {'chats' : chats})
+    return render(request, 'main/home.html', {'chats' : chats, 'length' : length})
 
 @login_required
 def SearchView(request):
@@ -44,7 +45,7 @@ def SearchView(request):
         result = User.objects.filter(username__icontains = query)
         serialize_result = serializers.serialize('json', result)
         return JsonResponse({'result' : serialize_result, 'length' : len(result)}, status = 200)
-    return render(request, 'main/search_single.html')
+    return render(request, 'main/search_single.html', {'me' : request.user.username})
 
 
 @login_required
@@ -58,14 +59,6 @@ def personalChatView(request, name):
         messages = Friends.objects.get(owner__username = arr[0], friend__username = arr[1]).friends.all()
     return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : messages, 'length' : len(messages)})
 
-@login_required
-def CreateGroup(request):
-    if(request.is_ajax() and request.method == 'GET'):
-        query = request.GET.get('search', None)
-        result = User.objects.filter(username__icontains = query)
-        serialize_result = serializers.serialize('json', result)
-        return JsonResponse({'result' : serialize_result, 'length' : len(result)}, status = 200)
-    return render(request, 'main/search_single.html')
 
 
 @login_required
@@ -76,7 +69,7 @@ def GroupParticipants(request):
         request.session['groupParticipants'] = query
         return JsonResponse({'valid' : True}, status = 200)
         
-    return render(request, 'main/search_multiple.html')
+    return render(request, 'main/search_multiple.html', {'me' : request.user.username})
 
 @login_required
 def GroupDetails(request):

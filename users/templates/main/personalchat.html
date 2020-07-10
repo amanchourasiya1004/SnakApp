@@ -36,99 +36,55 @@
                     <input type="text" class="msg-send" placeholder="Type here..." id = "msg-input">
                 </div>
                 <!-- <i class="fas fa-camera icons"></i>
-                <i class="fa fa-thumbs-up icons" aria-hidden="true"></i>
-                <i class="fa fa-paper-plane icons" aria-hidden="true" id = "msg-submit"></i> -->
+                <i class="fa fa-thumbs-up icons" aria-hidden="true"></i>-->
+                <i class="fa fa-paper-plane icons" aria-hidden="true" id = "msg-submit"></i>
             </div>
         </div>
-        <div class="message-body">
-            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
-                <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
-                    <div class="message-wrap-user">
-                        Hi jaan
-                    </div>
-                </div>
-            </div>
-            <div class="message-wrap-three-dots">
-                <div class="message-wrap-with-icon">
-                    <div class="message-wrap">
-                        I love you jaan. 
-                    </div>
-                </div>
-            </div>
-            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
-                <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
-                    <div class="message-wrap-user">
-                        Hi jaan
-                    </div>
-                </div>
-            </div>
-            <div class="message-wrap-three-dots">
-                <div class="message-wrap-with-icon">
-                    <div class="message-wrap">
-                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
-                    </div>
-                </div>
-            </div>
-            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
-                <div class="message-wrap-with-icon-user">
-                    <div class="message-wrap-user">
-                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
-                    </div>
-                </div>
-            </div>
-            <div class="message-wrap-three-dots">
-                <div class="message-wrap-with-icon">
-                    <div class="message-wrap">
-                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
-                    </div>
-                </div>
-            </div>
-            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
-                <div class="message-wrap-with-icon-user">
-                    <div class="message-wrap-user">
-                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
-                    </div>
-                </div>
-            </div>
-            <div class="message-wrap-three-dots">
-                <div class="message-wrap-with-icon">
-                    <div class="message-wrap">
-                        I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan.I love you jaan. 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- {% if len == 0 %}
-            <div></div>
+        {% if len == 0%}
+        <div></div>
         {% else %}
+        <div class="message-body">
             {% for i in msgs %}
-                <div>{{i.chat}}</div>
+                {% if i.sender == request.user.username %}
+                    <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
+                        <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
+                            <div class="message-wrap-user">
+                                {{i.chat}}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="message-wrap-three-dots">
+                        <div class="message-wrap-with-icon">
+                            <div class="message-wrap">
+                                {{i.chat}}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             {% endfor %}
+        </div>
         {% endif %}
-        <div id = 'msg-box' name = 'msg-box'></div>
-        <br><br><br>
-        <input type = "text" name = 'msg-input' id = 'msg-input'>
-        <input type = 'button' value = "Message" id = "msg-submit">      
-        {{otheruser|json_script:"user"}} 
-        {{me|json_script:"me"}}
-        {{request.user}} -->
+    </div>
 
     <script>
-        const me = JSON.parse(document.getElementById("me").textContent);
-        const otheruser = JSON.parse(document.getElementById("user").textContent);
+        const me = JSON.parse("{{me|escapejs}}");
+        const otheruser = JSON.parse("{{otheruser|escapejs}}");
         const socket = new WebSocket("ws://" + window.location.host + "/ws/personal/chat/" + otheruser +"/");
-
+        var msgbox = $(".message-body");
         socket.onmessage = function(e){
             const data = JSON.parse(e.data);
             if(data.sender == me){
-                sender = "You";
+                msgbox.append(
+                    '<div class="message-wrap-three-dots-user d-flex flex-row-reverse"><div class="message-wrap-with-icon-user d-flex flex-row-reverse"><div class="message-wrap-user">' + data.message + '</div></div></div>'
+                );
             }
             else{
-                sender = data.sender;
+                msgbox.append(
+                    '<div class="message-wrap-three-dots"><div class="message-wrap-with-icon"><div class="message-wrap">' + data.message + '</div></div></div>'
+                );
             }
-            var msg = sender + " : " + data.message + '\n';
-            $("#msg-box").append(msg);
+            msgbox.scrollTop(1000);
         }
         socket.onclose = function(e){
             console.error("Chat Socket closed unexpectedly");
@@ -149,9 +105,6 @@
             }));
             messageDOM.val('');
         });
-        function sort(s1, s2){
-            
-        }
     </script>
 </body>
 </html>
