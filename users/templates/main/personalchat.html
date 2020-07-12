@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
-    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/personalchat.css">
+    <link rel="stylesheet" href="{% static 'css/personalchat.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <title>PersonalChat</title>
@@ -19,7 +19,7 @@
             <span class="user-icon">
                 <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
             </span>
-            <div class="brand">Nandini</div>
+            <div class="brand">{{otheruser}}</div>
         </div>
         
             <div class="headicons">
@@ -68,8 +68,8 @@
     </div>
 
     <script>
-        const me = JSON.parse("{{me|escapejs}}");
-        const otheruser = JSON.parse("{{otheruser|escapejs}}");
+        const me = "{{me|escapejs}}";
+        const otheruser = "{{otheruser|escapejs}}";
         const socket = new WebSocket("ws://" + window.location.host + "/ws/personal/chat/" + otheruser +"/");
         var msgbox = $(".message-body");
         socket.onmessage = function(e){

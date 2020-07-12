@@ -16,8 +16,9 @@ body{
 .headicons{
     display: inline-block;
     color: white;
+    z-index: 100;
 }
-.fa-search{
+.fa-ellipsis-v{
     font-size: 25px !important;
     color: white;
     display: inline;

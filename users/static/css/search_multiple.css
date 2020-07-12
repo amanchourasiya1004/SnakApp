@@ -31,7 +31,18 @@
 .delicon{
     width: 19px;
     height: 19px;
-    background: rgba(0, 0, 0 , 0.3);
+    background: rgba(49, 32, 32, 0.3) !important;
     border-radius: 50%;
-    line-height: 16px;
+    line-height: 17px;
+}
+.btncreate{
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    background: #0a2342;
+    bottom: 0;
+    line-height: 40px;
+    font-size: 22px;
+    color: white;
+    padding: 7px 0px;
 }

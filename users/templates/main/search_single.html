@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search</title>
-    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/search_single.css">
+    <link rel="stylesheet" href="{% static 'css/search_single.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -43,15 +44,14 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-        
+        const me = "{{me|escapejs}}";
+        console.log(me);
         function personal(e){
             console.log("running");
-            var otheruser = $($(this).children($('.user-name'))[0]).text();
-            console.log(otheruser);
+            var otheruser = $($(e).children($('.user-name'))[0]).text();
             window.location.pathname = '/main/personalchat/' + otheruser + '/';
         }
         $('#search').keyup(function(){
-            const me = JSON.parse("{{me|escapejs}}")
             var name;
             const query = $(this).val();
             $.ajax({
@@ -68,9 +68,9 @@
                             continue;
                         }
                         $('.search-result').append(
-                            '<div class="results d-flex" onclick="personal(this)"><span class="user-icon"><img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png"></span><div class="user-data align-self-start"><div class="user-name">' + name + '</div><div class="mood">Hey there I am using SnakApp</div></div></div>'
+                            '<div class="results d-flex"><span class="user-icon"><img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png"></span><div class="user-data align-self-start" onclick="personal(this)"><div class="user-name">' + name + '</div><div class="mood">Hey there I am using SnakApp</div></div></div>'
                         );
-                    }
+                    } onclick="personal(this)"
                     if(response['length'] == 0){
                         $('.search-result').append(
                             '<div class="no-users">No Users found with this username</div>' 

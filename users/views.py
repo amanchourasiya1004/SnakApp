@@ -60,7 +60,7 @@ def LoginView(request):
             user = authenticate(username = uname, password = password)
             if(user != None):
                 login(request, user)
-                return render(request, 'main/home.html')
+                return redirect('HomeView')
         else:
             return render(request, 'users/login.html', {'msg' : 'Something wrong'})
     return render(request, 'users/login.html', {'msg' : ''})

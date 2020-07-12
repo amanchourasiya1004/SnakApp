@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from .models import PersonalChats, Friends
 from itertools import chain
 import json
+from usergroups.models import GroupChats, Groups, GroupUsers
 
 @login_required
 def HomeView(request):
@@ -16,8 +17,9 @@ def HomeView(request):
     # Group message section
     groupenrolled = request.user.groupenrolled.all()
     for i in groupenrolled:
-        k = i.group.chats.latest('time')
-        finalchat.append([i.group.groupname, k.chats, k.time])
+        if(len(i.group.chats.all()) > 0):
+            k = i.group.chats.latest('time')
+            finalchat.append([i.group.groupname, k.chats, k.time, 0])
     # Group message section end
 
     # Friends section start
@@ -27,13 +29,14 @@ def HomeView(request):
             name = i.owner.username
         else:
             name = i.friend.username
-        k = i.friends.latest('time')
-        finalchat.append([name, k.chat, k.time])
+        if(len(i.friends.all()) > 0):
+            k = i.friends.latest('time')
+            finalchat.append([name, k.chat, k.time, 1])
     # Friends section end
     sorted_chat = sorted(finalchat, key=lambda obj: obj[2], reverse=True)
     chat = []
     for i in sorted_chat:
-        chat.append([i[0], i[1]])
+        chat.append([i[0], i[1], i[3]])
     length = len(chat)
     chats = json.dumps(chat)
     return render(request, 'main/home.html', {'chats' : chats, 'length' : length})
@@ -75,5 +78,5 @@ def GroupParticipants(request):
 def GroupDetails(request):
     if(request.method == 'POST'):
         groupname = request.POST.get('groupname')
-        return redirect('GroupView', groupname = groupname)
+        return redirect('GroupCreate', groupname = groupname)
     return render(request, 'groups/groupdetail.html')

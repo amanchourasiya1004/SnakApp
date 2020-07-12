@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +7,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
-    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/home.css">
-    <link rel="stylesheet" href="/home/captain/snakapp/users/static/css/home_2.css">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home_2.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <title>Main</title>
@@ -23,11 +24,11 @@
                 <div class="email-sidebar">amanchourasiya1004@gmail.com</div>
             </div>
             <div class="utilities">
-                <div class="options">Notifications</div>
-                <div class="options">Payment options</div>
-                <div class="options">Reviews</div>
+                <div class="options newgroup">Create a group</div>
+                <div class="options singleuser">Search a Friend</div>
                 <div class="options">Contribute</div>
                 <div class="options">Your Orders</div>
+                <div class="options logout">Logout</div>
             </div>
         </div>
     </div>
@@ -38,7 +39,16 @@
         </div>
         
             <div class="headicons">
-                <i class="fa fa-search"></i>
+                <div class="dropdown" style="display: inline-block; z-index: 1;">
+                    <button type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" style="z-index: 1;">
+                      <a class="dropdown-item" href="#" style="z-index: 1;">Create a Group</a>
+                      <a class="dropdown-item" href="#" style="z-index: 1;">Search friends</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
             </div>
     </nav>
 
@@ -62,32 +72,6 @@
     <!-- No Chats section end -->
     {% else %}
     <div class="message-box">
-        
-        <!-- <div class="messages d-flex">
-            <span class="user-icon">
-                <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
-            </span>
-            <div class="user-data align-self-start">
-                <div class="user-name">Nandini</div>
-                <div class="lastmsg">I love you jaan..</div>
-            </div>
-            <div class="lasttime">
-                8:09 pm
-            </div>
-            <div class="duemsg">
-                <div class="pending text-center">2</div>
-            </div>
-        </div>
-        <div class="messages d-flex">
-            <span class="user-icon">
-                <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
-            </span>
-            <div class="user-data align-self-start">
-                <div class="user-name">Captain</div>
-                <div class="lastmsg">Kaisa hai be harami</div>
-            </div>
-            
-        </div> -->
     </div>
     {% endif %}
     <!-- 
@@ -98,7 +82,9 @@
                 <div class="pending text-center">3</div>
             </div>
      -->
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script>
         $('.fa-bars').click(function(){
             $('.sidebar').css({"width" : '77%'});
@@ -116,23 +102,45 @@
         $(".creategroup").click(function(){
             window.location.pathname = '/main/group/participants/';
         });
+        $('.newgroup').click(function(){
+            window.location.pathname = '/main/group/participants/';
+        });
+        $('.logout').click(function(){
+            window.location.pathname = '/accounts/logout/';
+        });
+        $('.singleuser').click(function(){
+            window.location.pathname = '/main/search/username/';
+        });
     </script>
     <script>
         var chat = JSON.parse("{{chats|escapejs}}");
         var a = $('.message-box');
         var userphoto;
         for(var i = 0; i < chat.length; i++){
-            userphoto = '<span class="user-icon"><img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png"></span>';
-            a.append(
-                '<div class="messages d-flex">' + userphoto + '<div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
-            )
+            var photo = "{% static 'images/user-profile/avatar-dhg.png'%}"
+            userphoto = '<span class="user-icon"><img class="rounded-circle" src = "#"></span>';
+            if(chat[i][2] === 0){
+                a.append(
+                    '<div class="messages d-flex">' + userphoto + '<div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
+                )
+            }
+            else if(chat[i][2] == 1){
+                a.append(
+                    '<div class="messages d-flex">' + userphoto + '<div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
+                )
+            }
         }
-        $('.messages').click(function(){
+        $('.user-data').click(function(){
             var name = $($(this).children($('.user-name'))[0]).text();
             console.log(name)
             window.location.pathname = '/main/personalchat/' + name + '/';
         });
-
+        $('.group-data').click(function(){
+            var groupname = $($(this).children($('.group-name'))[0]).text();
+            console.log(groupname)
+            window.location.pathname = '/groups/' + groupname + '/chats/';
+        });
+        
     </script>
 </body>
 </html>

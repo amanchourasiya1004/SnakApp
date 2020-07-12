@@ -1,7 +1,6 @@
 .message-box{
     width: 100% !important;
     height: calc(100vh - 75px);
-    border: 2px solid black;
     overflow-y: scroll;
     overflow-x: hidden;
     margin-top:72px;
@@ -27,6 +26,13 @@
         border-bottom: 1px solid rgba(0, 0, 0, 0.2);
         height: 100%;
     }
+    .group-data{
+        width: 100%;
+        padding-left: 3px;
+        padding-top: 7px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        height: 100%;
+    }
 }
 @media screen and (min-width : 430px){
     .user-data{
@@ -36,8 +42,21 @@
         height: 100%;
         /* border: 2px solid blue; */
     }
+    .group-data{
+        width: 100%;
+        padding-left: 0px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+        height: 100%;
+        /* border: 2px solid blue; */
+    }
 }
 .user-name{
+    letter-spacing: 0.4px;
+    font-size: 20px;
+    color: #001427;
+    font-weight: 600;
+}
+.group-name{
     letter-spacing: 0.4px;
     font-size: 20px;
     color: #001427;

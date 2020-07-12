@@ -1,33 +1,88 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
+    <link rel="stylesheet" href="{% static 'css/personalchat.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <title>GroupChat</title>
 </head>
 <body>
-    <div class="message-body">
-
+    <nav class="navbar bg-custom navbar-expand-xs fixed-top navbar-default">
+        <div class="hamburger d-flex">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            <span class="user-icon">
+                <img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png">
+            </span>
+            <div class="brand">{{groupname}}</div>
+        </div>
+        
+            <div class="headicons">
+                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </div>
+    </nav>
+    <div class="message-store">
+        <div class="msg-input-div">
+            <div class="msg-send-box">
+                <div class="emoji">
+                    <i class='far fa-grin' style='font-size:24px'></i>
+                </div>
+                <div style="display: inline-block; width: 86%;">
+                    <input type="text" class="msg-send" placeholder="Type here..." id = "msg-input">
+                </div>
+                <!-- <i class="fas fa-camera icons"></i>
+                <i class="fa fa-thumbs-up icons" aria-hidden="true"></i>-->
+                <i class="fa fa-paper-plane icons" aria-hidden="true" id = "msg-submit"></i>
+            </div>
+        </div>
+        <div class="message-body">
+            {% for i in chats %}
+                {% if i.sender.username == request.user.username %}
+                    <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
+                        <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
+                            <div class="message-wrap-user">
+                                {{i.chats}}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="message-wrap-three-dots">
+                        <div class="message-wrap-with-icon">
+                            <div class="message-wrap">
+                                {{i.chats}}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
-    <input type="text" id="msg-input">
-    <button id = 'msg-submit'>Send</button>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script>
         var groupname = "{{groupname|escapejs}}"
-        console.log(groupname)
-        const messageBody = $(".message-body");
+        var msgbox = $(".message-body");
         const socket = new WebSocket("ws://" + window.location.host + "/ws/chat/" + groupname + "/");
         var username = "{{user|escapejs}}"
         socket.onmessage = function(e){
             const data = JSON.parse(e.data);
-            sender = data.user;
-            var user = data.user;
-            console.log(user);
-            console.log(username);
-            $(".message-body").append(
-                "<div>" + user + " : " + data.message + "</div>"
-            );
-            
+            console.log(data.sender)
+            console.log(username)
+            if(data.sender == username){
+                msgbox.append(
+                    '<div class="message-wrap-three-dots-user d-flex flex-row-reverse"><div class="message-wrap-with-icon-user d-flex flex-row-reverse"><div class="message-wrap-user">' + data.message + '</div></div></div>'
+                );
+            }
+            else{
+                msgbox.append(
+                    '<div class="message-wrap-three-dots"><div class="message-wrap-with-icon"><div class="message-wrap">' + data.message + '</div></div></div>'
+                );
+            }
+            msgbox.scrollTop(1000);
         }
         socket.onclose = function(e){
             console.error("Chat Socket closed unexpectedly");
