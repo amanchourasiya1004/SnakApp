@@ -6,12 +6,11 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import JsonResponse
-from .models import PersonalChats, Friends
+from .models import PersonalChats, Friends, ImageUpload
 from itertools import chain
 import json
 from usergroups.models import GroupChats, Groups, GroupUsers
 from django.core.files.storage import FileSystemStorage
-from .forms import ImageUploadForm
 
 @login_required
 def HomeView(request):
@@ -57,27 +56,25 @@ def SearchView(request):
 def personalChatView(request, name):
     arr = [request.user.username, name]
     arr.sort()
-    form = ImageUploadForm()
+    if request.method == 'POST':
+        friend_obj = Friends.objects.filter(owner__username = arr[0], friend__username = arr[1])[0]
+        try:
+            myfile = request.FILES['data']
+            f = FileSystemStorage()
+            filename = f.save(myfile.name, myfile)
+            url = f.url(filename)
+
+            ImageUpload.objects.create(path_image = url, filename = filename, chatconnect = friend_obj)
+            return JsonResponse({'error': False, 'path': url})
+        except:
+            return JsonResponse({'error': True})
     if(len(Friends.objects.filter(owner__username = arr[0], friend__username = arr[1])) == 0):
         Friends.objects.create(owner = User.objects.get(username = arr[0]), friend = User.objects.get(username = arr[1]))
         messages = []
     else:
         messages = Friends.objects.get(owner__username = arr[0], friend__username = arr[1]).friends.all()
-    return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : messages, 'length' : len(messages), 'form' : form})
+    return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : messages, 'length' : len(messages)})
 
-@login_required
-def ImageProcess(request):
-    if request.method == 'POST':
-        print(request.POST)
-        print('----------------------------------------------')
-        print(request.FILES['file'])
-        print('-----------------------------------------------')
-        form = ImageUploadForm(request.POST, request.FILES['file'].read())
-        if form.is_valid():
-            form.save()
-            return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
-        else:
-            return JsonResponse({'error': True, 'errors': form.errors})
 @login_required
 def GroupParticipants(request):
     if(request.is_ajax() and request.method == 'GET'):

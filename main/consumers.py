@@ -81,13 +81,16 @@ class PersonalChatConsumer(AsyncConsumer):
         if data is not None:
             msg_data = json.loads(data)
             message = msg_data['message']
-            await self.savePersonalChats(message)
+            senttype = msg_data['type']
+            if(senttype == 1):
+                await self.savePersonalChats(message)
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type' : 'personalchat.message',
                     'message' : message,
-                    'sender' : self.person2
+                    'sender' : self.person2,
+                    'msg_type' : senttype
                 }
             )
             
@@ -100,11 +103,13 @@ class PersonalChatConsumer(AsyncConsumer):
     async def personalchat_message(self, event):
         message = event['message']
         sender = event['sender']
+        msg_type = event['msg_type']
         await self.send({
             'type' : 'websocket.send',
             'text' : json.dumps({
                 'message' : message,
-                'sender' : sender
+                'sender' : sender,
+                'msg_type' : msg_type
             })
         })
 

@@ -18,8 +18,9 @@ class PersonalChats(models.Model):
         verbose_name_plural = 'PersonalChats'
 
 class ImageUpload(models.Model):
-    image = models.ImageField(upload_to='userimages')
-    chatconnect = models.ForeignKey(PersonalChats, on_delete = models.CASCADE, related_name='sentimages')
+    path_image = models.TextField()
+    filename = models.TextField()
+    chatconnect = models.ForeignKey(Friends, on_delete = models.CASCADE, related_name='sentimages')
     time = models.DateTimeField(auto_now_add=True)
     class Meta:
         verbose_name_plural = 'ImageUploads'

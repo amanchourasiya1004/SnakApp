@@ -37,14 +37,12 @@
                 </div>
                 <!-- <i class="fas fa-camera icons"></i>
                 <i class="fa fa-thumbs-up icons" aria-hidden="true"></i>-->
-                <form action = "{%url 'ImageProcess' %}" id = "imageformupload" method="POST" enctype="multipart/form-data" class="imageform">
+                <form action = "{%url 'PersonalChat' otheruser %}" id = "imageformupload" method="POST" enctype="multipart/form-data" class="imageform">
                     {% csrf_token %}
-                    <!-- <label for="imagesent">
+                    <label for="imagesent">
                         <i class="fas fa-camera icons"></i>        
                     </label>
-                    <input type='file' id="imagesent" accept="image/*" name = "image" class="imageupload"/> -->
-                    {{form.as_p}}
-                    
+                    <input type='file' id="imagesent" accept="image/*" name = "image" class="imageupload"/>
                 </form>
                 <i class="fa fa-paper-plane icons" aria-hidden="true" id = "msg-submit"></i>
             </div>
@@ -77,24 +75,46 @@
     </div>
 
     <script>
+        $(document).ready(function(){
+        var i = 0;
         const me = "{{me|escapejs}}";
         const otheruser = "{{otheruser|escapejs}}";
         const socket = new WebSocket("ws://" + window.location.host + "/ws/personal/chat/" + otheruser +"/");
         var msgbox = $(".message-body");
         socket.onmessage = function(e){
             const data = JSON.parse(e.data);
-            if(data.sender == me){
-                msgbox.append(
-                    '<div class="message-wrap-three-dots-user d-flex flex-row-reverse"><div class="message-wrap-with-icon-user d-flex flex-row-reverse"><div class="message-wrap-user">' + data.message + '</div></div></div>'
-                );
+            if(data.msg_type === 1){
+                if(data.sender == me){
+                    msgbox.append(
+                        '<div class="message-wrap-three-dots-user d-flex flex-row-reverse"><div class="message-wrap-with-icon-user d-flex flex-row-reverse"><div class="message-wrap-user">' + data.message + '</div></div></div>'
+                    );
+                }
+                else{
+                    msgbox.append(
+                        '<div class="message-wrap-three-dots"><div class="message-wrap-with-icon"><div class="message-wrap">' + data.message + '</div></div></div>'
+                    );
+                }
+                var box = document.getElementById("msg-body");
+                box.scrollTop = msgbox.scrollHeight;
             }
             else{
-                msgbox.append(
-                    '<div class="message-wrap-three-dots"><div class="message-wrap-with-icon"><div class="message-wrap">' + data.message + '</div></div></div>'
-                );
+                if(data.sender == me){
+                    msgbox.append(
+                        '<div class="message-wrap-three-dots-user d-flex flex-row-reverse"><div class="message-wrap-with-icon-user d-flex flex-row-reverse"><div class="image-wrap-user d-flex flex-row-reverse"><div class="imagemsg"><img src="#" class="imageuploaded" ></div></div></div></div>'
+                    );
+                    $($(".imageuploaded")[i]).attr('src', data.message);
+                    i++;
+                }
+                else{
+                    msgbox.append(
+                        '<div class="message-wrap-three-dots"><div class="message-wrap-with-icon"><div class="image-wrap"><div class="imagemsg"><img src="#" class="imageuploaded" ></div></div></div></div>'
+                    );
+                    $($(".imageuploaded")[i]).attr('src', data.message);
+                    i++;
+                }
+                var box = document.getElementById("msg-body");
+                box.scrollTop = msgbox.scrollHeight;
             }
-            var box = document.getElementById("msg-body");
-            box.scrollTop = msgbox.scrollHeight;
         }
         socket.onclose = function(e){
             console.error("Chat Socket closed unexpectedly");
@@ -111,13 +131,13 @@
             const message = messageDOM.val();
             
             socket.send(JSON.stringify({
-                'message' : message
+                'message' : message,
+                'type' : 1
             }));
             messageDOM.val('');
         });
-    </script>
-    <script>
-        $(document).ready(function(){
+        
+            
             function getCookie(name) {
                 var cookieValue = null;
                 if (document.cookie && document.cookie != '') {
@@ -143,7 +163,6 @@
                 }
             });
             var sendimage;
-            var i = 0;
             $('input[type="file"]').change(function(e){
                 var file = e.target.files;
                 sendimage = file[0];
@@ -151,13 +170,11 @@
                 if (file && file[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $(".message-body").append(
-                            '<div class="message-wrap-three-dots-user d-flex flex-row-reverse"><div class="message-wrap-with-icon-user d-flex flex-row-reverse"><div class="image-wrap-user d-flex flex-row-reverse"><div class="imagemsg"><img src="#" class="imageuploaded" ></div></div></div></div>'
-                        );
-                        $($(".imageuploaded")[i]).attr('src', e.target.result);
-                        i++;
-                        var msgbox = document.getElementById("msg-body");
-                        msgbox.scrollTop = msgbox.scrollHeight;
+                        // $(".message-body").append(
+                        //     '<div class="message-wrap-three-dots-user d-flex flex-row-reverse"><div class="message-wrap-with-icon-user d-flex flex-row-reverse"><div class="image-wrap-user d-flex flex-row-reverse"><div class="imagemsg"><img src="#" class="imageuploaded" ></div></div></div></div>'
+                        // );
+                        // $($(".imageuploaded")[i]).attr('src', e.target.result);
+                        // i++;
                         console.log("yo")
                         $("#imageformupload").submit();
                     }
@@ -167,13 +184,13 @@
             var submitHandler = function(event) {
                 event.preventDefault();
                 var form_data = new FormData();
-                form_data.append('file', sendimage);
+                form_data.append('data', sendimage);
 
                 for (var key of form_data.entries()) {
                     console.log(key[0] + ', ' + key[1]);
                 }
                 $.ajax({
-                    url: "{% url 'ImageProcess' %}",
+                    url: "{% url 'PersonalChat' otheruser %}",
                     type: 'POST',
                     data: form_data,
                     contentType: false,
@@ -185,7 +202,10 @@
                             console.log("Something wrong in view");
                         }
                         else{
-                            alert(response.message)
+                            socket.send(JSON.stringify({
+                                'message' : response.path,
+                                'type' : 0
+                            }));
                         }
                     },
                     error: function(){

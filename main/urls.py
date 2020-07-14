@@ -7,6 +7,5 @@ urlpatterns = [
     path('group/participants/', views.GroupParticipants, name = 'GroupParticipants'),
     path('personalchat/<name>/', views.personalChatView, name = 'PersonalChat'),
     path('group/detail/', views.GroupDetails, name = 'GroupDetails'),
-    path('image/send/', views.ImageProcess, name = 'ImageProcess'),
 
 ]
