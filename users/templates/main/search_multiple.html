@@ -64,23 +64,28 @@
         }
         $('#search').keyup(function(){
             var name;
+            var spanelem;
             const query = $(this).val();
             $.ajax({
                 type : 'GET',
                 url : "{% url 'SearchView' %}",
                 data : {'search' : query},
                 success : function(response){
+                    var span;
                     var queryset = JSON.parse(response['result']);
                     $('.search-result').empty();
                     for(var i = 0; i < queryset.length; i++){
                         name = queryset[i]['fields']['username'];
                         if(name == me){
-                            console.log(me);
                             continue;
                         }
                         $('.search-result').append(
-                            '<div class="results d-flex"><span class="user-icon"><img class="rounded-circle" src="/home/captain/chatrooms/authenticate/static/images/avatar-dhg.png"></span><div class="user-data align-self-start" onclick="personal(this)"><div class="user-name">' + name + '</div><div class="mood">Hey there I am using SnakApp</div></div></div>'
+                            '<div class="results d-flex"><span class="user-icon"></span><div class="user-data align-self-start" onclick="personal(this)"><div class="user-name">' + name + '</div><div class="mood">Hey there I am using SnakApp</div></div></div>'
                         );
+                        var x = document.createElement("IMG");
+                        x.setAttribute("src", "{% static 'images/user-profile/avatar-dhg.png' %}");
+                        spanelem = document.getElementsByClassName("user-icon")[i - 1];
+                        spanelem.appendChild(x);
                     }
                     if(response['length'] == 0){
                         $('.search-result').append(

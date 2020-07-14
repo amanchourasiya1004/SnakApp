@@ -1,6 +1,6 @@
 body{
     font-family: 'Muli', sans-serif;
-    
+    overflow-y: hidden !important;
 }
 .bg-custom{
     background-color: #0a2342;
@@ -74,18 +74,19 @@ body{
 .msg-send{
     display: inline-block;
     height: inherit;
-    width: inherit;
+    width: 100%;
     font-size: 18px;
     margin-left: 35px;
-    padding: 0 10px 0 20px;
+    padding: 0 45px 0 20px;
     margin-top: 8px;
     background: transparent;
     border: none;
     outline: none;
 }
 .icons{
-    margin-right: 20px;
+    margin-right: 12px;
     font-size: 22px;
+    display: inline !important;
 }
 .message-body{
     width: 100%;
@@ -138,4 +139,42 @@ body{
     transition-timing-function: ease;
     transition-delay: 0s;
 }
+.image-wrap-user{
+    display: inline-block; 
+    font-size: 17px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 6px;
+    border-radius: 3px;
+    color: white;
+    transition-duration: 1s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
+.image-wrap{
+    display: inline-block; 
+    font-size: 17px;
+    background-color: #dff0d8;
+    padding: 6px;
+    border-radius: 3px;
+    color: white;
+    transition-duration: 1s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
 /* message box styling end */
+/*  Image upload styling form*/
+.imageform{
+    display: inline !important;
+}
+.imageupload{
+    display: none !important;
+}
+.imagemsg{
+    width: 100%;
+}
+.imagemsg img{
+    width: 100% !important;
+    max-height: 100%;
+    border-radius: 3px;
+}
+/* image form styling end */

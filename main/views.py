@@ -10,6 +10,8 @@ from .models import PersonalChats, Friends
 from itertools import chain
 import json
 from usergroups.models import GroupChats, Groups, GroupUsers
+from django.core.files.storage import FileSystemStorage
+from .forms import ImageUploadForm
 
 @login_required
 def HomeView(request):
@@ -55,15 +57,27 @@ def SearchView(request):
 def personalChatView(request, name):
     arr = [request.user.username, name]
     arr.sort()
+    form = ImageUploadForm()
     if(len(Friends.objects.filter(owner__username = arr[0], friend__username = arr[1])) == 0):
         Friends.objects.create(owner = User.objects.get(username = arr[0]), friend = User.objects.get(username = arr[1]))
         messages = []
     else:
         messages = Friends.objects.get(owner__username = arr[0], friend__username = arr[1]).friends.all()
-    return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : messages, 'length' : len(messages)})
+    return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : messages, 'length' : len(messages), 'form' : form})
 
-
-
+@login_required
+def ImageProcess(request):
+    if request.method == 'POST':
+        print(request.POST)
+        print('----------------------------------------------')
+        print(request.FILES['file'])
+        print('-----------------------------------------------')
+        form = ImageUploadForm(request.POST, request.FILES['file'].read())
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'error': False, 'message': 'Uploaded Successfully'})
+        else:
+            return JsonResponse({'error': True, 'errors': form.errors})
 @login_required
 def GroupParticipants(request):
     if(request.is_ajax() and request.method == 'GET'):
@@ -80,3 +94,4 @@ def GroupDetails(request):
         groupname = request.POST.get('groupname')
         return redirect('GroupCreate', groupname = groupname)
     return render(request, 'groups/groupdetail.html')
+
