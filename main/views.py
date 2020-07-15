@@ -31,9 +31,24 @@ def HomeView(request):
         else:
             name = i.friend.username
         if(len(i.friends.all()) > 0):
-            k = i.friends.latest('time')
-            finalchat.append([name, k.chat, k.time, 1])
+            k1 = i.friends.latest('time')
+        else:
+            k1 = ''
+        if(len(i.sentimages.all()) > 0):
+            k2 = i.sentimages.latest('time')
+        else:
+            k2 = ''
+        if(k1 == '' and k2 != ''):
+            finalchat.append([name, '', k2.time, 2])
+        elif(k1 != '' and k2 == ''):
+            finalchat.append([name, k1.chat, k1.time, 1])
+        elif(k1 != '' and k2 != ''):
+            if(k1.time > k2.time):
+                finalchat.append([name, '', k2.time, 2])
+            else:
+                finalchat.append([name, k1.chat, k1.time, 1])
     # Friends section end
+
     sorted_chat = sorted(finalchat, key=lambda obj: obj[2], reverse=True)
     chat = []
     for i in sorted_chat:
@@ -51,29 +66,34 @@ def SearchView(request):
         return JsonResponse({'result' : serialize_result, 'length' : len(result)}, status = 200)
     return render(request, 'main/search_single.html', {'me' : request.user.username})
 
-
 @login_required
 def personalChatView(request, name):
     arr = [request.user.username, name]
     arr.sort()
+    if(len(Friends.objects.filter(owner__username = arr[0], friend__username = arr[1])) == 0):
+        f = Friends.objects.create(owner = User.objects.get(username = arr[0]), friend = User.objects.get(username = arr[1]))
+        total_msgs = []
+    else:
+        f = Friends.objects.get(owner__username = arr[0], friend__username = arr[1])
+        messages = f.friends.all()
+        images = f.sentimages.all()
+        total_msgs = list(chain(messages, images))
+        total_msgs = sorted(total_msgs, key=lambda obj: obj.time)
     if request.method == 'POST':
-        friend_obj = Friends.objects.filter(owner__username = arr[0], friend__username = arr[1])[0]
         try:
+            print(request.FILES)
             myfile = request.FILES['data']
             f = FileSystemStorage()
             filename = f.save(myfile.name, myfile)
+            print(filename, 'filename')
             url = f.url(filename)
-
-            ImageUpload.objects.create(path_image = url, filename = filename, chatconnect = friend_obj)
+            print(url, 'url')
+            ImageUpload.objects.create(path_image = url, filename = filename, chatconnect = f, sender = request.user.username)
+            print('Image uploaded')
             return JsonResponse({'error': False, 'path': url})
         except:
             return JsonResponse({'error': True})
-    if(len(Friends.objects.filter(owner__username = arr[0], friend__username = arr[1])) == 0):
-        Friends.objects.create(owner = User.objects.get(username = arr[0]), friend = User.objects.get(username = arr[1]))
-        messages = []
-    else:
-        messages = Friends.objects.get(owner__username = arr[0], friend__username = arr[1]).friends.all()
-    return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : messages, 'length' : len(messages)})
+    return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : total_msgs, 'length' : len(total_msgs)})
 
 @login_required
 def GroupParticipants(request):

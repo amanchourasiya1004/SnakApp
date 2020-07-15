@@ -47,31 +47,57 @@
                 <i class="fa fa-paper-plane icons" aria-hidden="true" id = "msg-submit"></i>
             </div>
         </div>
-        {% if len == 0%}
-        <div></div>
-        {% else %}
+
         <div class="message-body" id = "msg-body">
-            {% for i in msgs %}
-                {% if i.sender == request.user.username %}
-                    <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
-                        <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
-                            <div class="message-wrap-user">
-                                {{i.chat}}
+            {% if len == 0 %}
+                <div></div>
+            {% else %}
+                {% for i in msgs %}
+                    {% if i.sender == request.user.username %}
+                        {% if i.msgtype == 1 %}
+                            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
+                                <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
+                                    <div class="message-wrap-user">
+                                        {{i.chat}}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="message-wrap-three-dots">
-                        <div class="message-wrap-with-icon">
-                            <div class="message-wrap">
-                                {{i.chat}}
+                        {% else %}
+                            <div class="message-wrap-three-dots-user d-flex flex-row-reverse">
+                                <div class="message-wrap-with-icon-user d-flex flex-row-reverse">
+                                    <div class="image-wrap-user d-flex flex-row-reverse">
+                                        <div class="imagemsg">
+                                            <img src="{{i.path_image}}">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        {% if i.msgtype == 1 %}
+                            <div class="message-wrap-three-dots">
+                                <div class="message-wrap-with-icon">
+                                    <div class="message-wrap">
+                                        {{i.chat}}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="message-wrap-three-dots">
+                                <div class="message-wrap-with-icon">
+                                    <div class="image-wrap">
+                                        <div class="imagemsg">
+                                            <img src="{{i.path_image}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
-        {% endif %}
+        
     </div>
 
     <script>

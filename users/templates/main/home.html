@@ -127,6 +127,11 @@
                     '<div class="messages d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
                 )
             }
+            else if(chat[i][2] == 2){
+                a.append(
+                    '<div class="messages d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">Photo</div></div></div>'
+                )
+            }
             var x = document.createElement("IMG");
             x.setAttribute("src", "{% static 'images/user-profile/avatar-dhg.png' %}");
             span = document.getElementsByClassName("user-icon")[i];
