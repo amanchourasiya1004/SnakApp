@@ -122,12 +122,17 @@
                     '<div class="messages d-flex"><span class="user-icon"></span><div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
                 )
             }
-            else if(chat[i][2] == 1){
+            else if(chat[i][2] === 1){
+                a.append(
+                    '<div class="messages d-flex"><span class="user-icon"></span><div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">Photo</div></div></div>'
+                )
+            }
+            else if(chat[i][2] == 2){
                 a.append(
                     '<div class="messages d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
                 )
             }
-            else if(chat[i][2] == 2){
+            else if(chat[i][2] == 3){
                 a.append(
                     '<div class="messages d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">Photo</div></div></div>'
                 )

@@ -19,8 +19,22 @@ def HomeView(request):
     groupenrolled = request.user.groupenrolled.all()
     for i in groupenrolled:
         if(len(i.group.chats.all()) > 0):
-            k = i.group.chats.latest('time')
-            finalchat.append([i.group.groupname, k.chats, k.time, 0])
+            k1 = i.group.chats.latest('time')
+        else:
+            k1 = ''
+        if(len(i.group.sentimages.all()) > 0):
+            k2 = i.group.sentimages.latest('time')
+        else:
+            k2 = ''
+        if(k1 == '' and k2 != ''):
+            finalchat.append([i.group.groupname, '', k2.time, 1])
+        elif(k1 != '' and k2 == ''):
+            finalchat.append([i.group.groupname, k1.chats, k1.time, 0])
+        elif(k1 != '' and k2 != ''):
+            if(k1.time < k2.time):
+                finalchat.append([i.group.groupname, '', k2.time, 1])
+            else:
+                finalchat.append([i.group.groupname, k1.chats, k1.time, 0])
     # Group message section end
 
     # Friends section start
@@ -39,14 +53,14 @@ def HomeView(request):
         else:
             k2 = ''
         if(k1 == '' and k2 != ''):
-            finalchat.append([name, '', k2.time, 2])
+            finalchat.append([name, '', k2.time, 3])
         elif(k1 != '' and k2 == ''):
-            finalchat.append([name, k1.chat, k1.time, 1])
+            finalchat.append([name, k1.chat, k1.time, 2])
         elif(k1 != '' and k2 != ''):
-            if(k1.time > k2.time):
-                finalchat.append([name, '', k2.time, 2])
+            if(k1.time < k2.time):
+                finalchat.append([name, '', k2.time, 3])
             else:
-                finalchat.append([name, k1.chat, k1.time, 1])
+                finalchat.append([name, k1.chat, k1.time, 2])
     # Friends section end
 
     sorted_chat = sorted(finalchat, key=lambda obj: obj[2], reverse=True)
@@ -83,10 +97,10 @@ def personalChatView(request, name):
         try:
             print(request.FILES)
             myfile = request.FILES['data']
-            f = FileSystemStorage()
-            filename = f.save(myfile.name, myfile)
+            fr = FileSystemStorage()
+            filename = fr.save(myfile.name, myfile)
             print(filename, 'filename')
-            url = f.url(filename)
+            url = fr.url(filename)
             print(url, 'url')
             ImageUpload.objects.create(path_image = url, filename = filename, chatconnect = f, sender = request.user.username)
             print('Image uploaded')

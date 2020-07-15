@@ -21,6 +21,7 @@ class GroupChats(models.Model):
     group = models.ForeignKey(Groups, on_delete=models.CASCADE, related_name='chats')
     chats = models.TextField()
     time = models.DateTimeField(auto_now_add=True)
+    msgtype = models.IntegerField(default=1)
 
     class Meta:
         verbose_name_plural = 'GroupChats'
@@ -32,3 +33,13 @@ class GroupUsers(models.Model):
 
     class Meta:
         verbose_name_plural = 'UserGroups'
+
+class ImageUploadGroup(models.Model):
+    path_image = models.TextField()
+    filename = models.TextField()
+    chatconnect = models.ForeignKey(Groups, on_delete = models.CASCADE, related_name='sentimages')
+    time = models.DateTimeField(auto_now_add=True)
+    msgtype = models.IntegerField(default=0)
+    sender = models.ForeignKey(User, on_delete= models.CASCADE, related_name = 'imagessent')
+    class Meta:
+        verbose_name_plural = 'ImageUploadGroup'
