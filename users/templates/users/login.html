@@ -18,15 +18,15 @@
         <div class="signup text-center">
             Hello !
         </div>
-        <form action="{% url 'LoginView' %}" method="POST" class="form">
+        <form action="{% url 'LoginView' %}" method="POST" class="form" novalidate>
             {% csrf_token %}
             <div class="form-group">
-            <label class="form-label" for="first">Username</label>
-            <input id="first" class="form-input" type="text" name = 'username'/>
+            <label class="form-label" for="username">Username</label>
+            <input id="username" autocomplete="off" class="form-input" type="text" name = 'username' required/>
             </div>
             <div class="form-group">
-            <label class="form-label" for="last">Password</label>
-            <input id="last" class="form-input" type="password" name='password'/>
+            <label class="form-label" for="password">Password</label>
+            <input id="password" class="form-input" type="password" name='password' required/>
             </div>
             <div class="input-group border-less justify-content-center">
             <button type="submit" class="btn-signup-initial">Sign Up</button>
@@ -52,6 +52,48 @@
         } else {
             $(this).addClass('filled');
         }
+        });
+    </script>
+    <script>
+        
+        const formLogin = $(".form");
+        var check_login1 = false;
+        var check_login2 = false;
+        $(".form-input").keyup(function(){
+            var identify = $(this).attr("id");
+            if(identify === "username"){
+                if($(this).val().length == 0){
+                    check_login1 = false;
+                }
+                else{
+                    check_login1 = true;
+                }
+            }
+            else if(identify === "password"){
+                if($(this).val().length == 0){
+                    check_login2 = false;
+                }
+                else{
+                    check_login2 = true;
+                }
+            }
+            if(check_login1 === true && check_login2 === true){
+            
+                $("button").css({"background-color" : "#0a2342", "color" : '#fff'});
+            }
+            else{
+                $("button").css({'background-color' : "#e8e8e8", "color" : "rgba(0, 0, 0, 0.3)"});
+            }
+        });
+        formLogin.submit(function(event){
+            if(check_login1 === false || check_login2 === false){
+                console.log("this is the provlem")
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            else{
+                console.log("Worked");
+            }
         });
     </script>
 </body>

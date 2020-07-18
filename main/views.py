@@ -74,8 +74,10 @@ def HomeView(request):
 @login_required
 def SearchView(request):
     if(request.is_ajax() and request.method == 'GET'):
+        print("workingtill here--------------------------")
         query = request.GET.get('search', None)
         result = User.objects.filter(username__icontains = query)
+        print(result, "----------------------------------------------------------------------")
         serialize_result = serializers.serialize('json', result)
         return JsonResponse({'result' : serialize_result, 'length' : len(result)}, status = 200)
     return render(request, 'main/search_single.html', {'me' : request.user.username})

@@ -21,16 +21,16 @@
         <form action="{% url 'RegisterView' %}" method = "POST" class="form">
             {% csrf_token %}
             <div class="form-group">
-            <label class="form-label" for="first">Username</label>
-            <input id="first" class="form-input" type="text" name = 'username'/>
+            <label class="form-label" for="username">Username</label>
+            <input id="username" autocomplete = "off" class="form-input" type="text" name = 'username'/>
             </div>
             <div class="form-group">
-            <label class="form-label" for="last">Email</label>
-            <input id="last" class="form-input" type="text" name='email'/>
+            <label class="form-label" for="email">Email</label>
+            <input id="email" autocomplete = "off" class="form-input" type="text" name='email'/>
             </div>
             <div class="form-group">
-            <label class="form-label" for="color">Password</label>
-            <input id="color" class="form-input" type="password" name='password'/>
+            <label class="form-label" for="password">Password</label>
+            <input id="password" autocomplete = "off" class="form-input" type="password" name='password'/>
             </div>
             <div class="input-group border-less justify-content-center">
             <button type="submit" class="btn-signup-initial">Sign Up</button>
@@ -56,6 +56,67 @@
         } else {
             $(this).addClass('filled');
         }
+        });
+    </script>
+    <script>
+        function validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+        // For signup form start
+        var check1 = false;
+        var check2 = false;
+        var check3 = false;
+        var formSignup = $('.form');
+        $(".form-input").keyup(function(){
+            var identify = $(this).attr("id");
+            if(identify === "username"){
+                if($(this).val().length <= 3){
+                    $(this).css({"box-shadow" : "0 1px 0 0 #ce1f3b"});
+                    check1 = false;
+                }
+                else{
+                    $(this).css({"box-shadow" : "0 1px 0 0 #4c9a2a"});
+                    check1 = true;
+                }
+            }
+            else if(identify === "email"){
+                if(validateEmail($(this).val())){
+                    $(this).css({"box-shadow" : "0 1px 0 0 #4c9a2a"});
+                    check2 = true;
+                }
+                else{
+                    $(this).css({"box-shadow" : "0 1px 0 0 #ce1f3b"});
+                    check2 = false;
+                }
+            }
+            else if(identify === "password"){
+                if($(this).val().length <= 4){
+                    $(this).css({"box-shadow" : "0 1px 0 0 #ce1f3b"});
+                    check3 = false;
+                }
+                else{
+                    $(this).css({"box-shadow" : "0 1px 0 0 #4c9a2a"});
+                    check3 = true;
+                }
+            }
+            if(check1 === true && check2 === true && check3 === true){
+            
+                $("button").css({"background-color" : "#0a2342", "color" : '#fff'});
+                
+            }
+            else{
+                $("button").css({'background-color' : "#e8e8e8", "color" : "rgba(0, 0, 0, 0.3)"});
+            }
+        });
+        formSignup.submit(function(event){
+            if(check1 === false || check2 === false || check3 === false || check4 === false){
+            event.preventDefault();
+            event.stopPropagation();
+            }
+            else{
+            console.log("Worked");
+            }
         });
     </script>
 </body>

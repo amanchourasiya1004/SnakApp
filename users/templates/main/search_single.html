@@ -64,6 +64,7 @@
                     $('.search-result').empty();
                     for(var i = 0; i < queryset.length; i++){
                         name = queryset[i]['fields']['username'];
+                        console.log("kyi")
                         if(name == me){
                             continue;
                         }
@@ -72,7 +73,7 @@
                         );
                         var x = document.createElement("IMG");
                         x.setAttribute("src", "{% static 'images/user-profile/avatar-dhg.png' %}");
-                        spanelem = document.getElementsByClassName("user-icon")[i - 1];
+                        spanelem = document.getElementsByClassName("user-icon")[i];
                         spanelem.appendChild(x);
                     } 
                     if(response['length'] == 0){

@@ -30,6 +30,9 @@ body{
     border-radius: 4px !important;
     outline: none !important;
     border: none;
+    transition-timing-function: ease;
+    transition-duration: 1.3s;
+    transition-delay: 0s;
 }
 
 .input-group{
