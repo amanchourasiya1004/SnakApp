@@ -102,6 +102,15 @@
 
     <script>
         $(document).ready(function(){
+        var messages = document.getElementById("msg-body");
+        function scrollToBottom() {
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        scrollToBottom();
+        $(".fa-arrow-left").click(function(){
+            window.location.pathname = '/main/';
+        })
         var i = 0;
         const me = "{{me|escapejs}}";
         const otheruser = "{{otheruser|escapejs}}";
@@ -120,8 +129,7 @@
                         '<div class="message-wrap-three-dots"><div class="message-wrap-with-icon"><div class="message-wrap">' + data.message + '</div></div></div>'
                     );
                 }
-                var box = document.getElementById("msg-body");
-                box.scrollTop = msgbox.scrollHeight;
+                
             }
             else{
                 if(data.sender == me){
@@ -138,9 +146,8 @@
                     $($(".imageuploaded")[i]).attr('src', data.message);
                     i++;
                 }
-                var box = document.getElementById("msg-body");
-                box.scrollTop = msgbox.scrollHeight;
             }
+            scrollToBottom();
         }
         socket.onclose = function(e){
             console.error("Chat Socket closed unexpectedly");
@@ -192,7 +199,6 @@
             $('input[type="file"]').change(function(e){
                 var file = e.target.files;
                 sendimage = file[0];
-                console.log(sendimage)
                 if (file && file[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
@@ -201,7 +207,6 @@
                         // );
                         // $($(".imageuploaded")[i]).attr('src', e.target.result);
                         // i++;
-                        console.log("yo")
                         $("#imageformupload").submit();
                     }
                     reader.readAsDataURL(file[0]);
@@ -211,10 +216,6 @@
                 event.preventDefault();
                 var form_data = new FormData();
                 form_data.append('data', sendimage);
-
-                for (var key of form_data.entries()) {
-                    console.log(key[0] + ', ' + key[1]);
-                }
                 $.ajax({
                     url: "{% url 'PersonalChat' otheruser %}",
                     type: 'POST',
@@ -223,7 +224,6 @@
                     processData: false,
                     cache : false,
                     success: function (response) {
-                        console.log(response)
                         if(response.error){
                             console.log("Something wrong in view");
                         }

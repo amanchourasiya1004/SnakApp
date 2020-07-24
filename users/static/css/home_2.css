@@ -9,7 +9,7 @@
 .messages{
     width: 100%;
     padding: 10px 0px 2px 17px;
-    height: 100px;
+    height: 95px;
     position: relative;
 }
 .user-icon img{
@@ -17,6 +17,7 @@
     height: 67px;
     border-radius: 50%;
     margin-right:  15px;
+    margin-top: 4px;
 }
 @media screen and (max-width : 425px){
     .user-data{
@@ -64,6 +65,9 @@
 }
 .lastmsg{
     letter-spacing: 0.2px;
+    margin-top: 1px;
+    overflow-x: hidden;
+    height: 27px;
 }
 .lasttime{
     position: absolute;

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Groups(models.Model):
+    actual = models.CharField(max_length=50, default='-')
     admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name='creator')
     groupname = models.CharField(max_length = 20, unique=True)
     timeCreation = models.DateTimeField(auto_now_add=True)

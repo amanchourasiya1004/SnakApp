@@ -18,7 +18,7 @@ def GroupCreate(request, groupname):
     grouplist = request.user.creator.filter(groupname = x)
     if(len(grouplist) == 0):
         participants = request.session['groupParticipants']
-        a = Groups.objects.create(admin = request.user, groupname = x, num = len(participants), participants = str(participants))
+        a = Groups.objects.create(actual = groupname, admin = request.user, groupname = x, num = len(participants), participants = str(participants))
         for user in participants:
             GroupUsers.objects.create(group = a, user = User.objects.get(username = user))
         return render(request, 'groups/groupview.html', {'groupname' : x, 'user' : request.user.username, 'chats' : [] ,'len' : 0})
@@ -46,5 +46,5 @@ def GroupView(request, groupname):
     images = group.sentimages.all()
     total_msgs = list(chain(chats, images))
     total_msgs = sorted(total_msgs, key=lambda obj: obj.time)
-    return render(request, 'groups/groupview.html', {'groupname' : x, 'user' : request.user.username, 'chats' : total_msgs, 'len' : len(total_msgs)})
+    return render(request, 'groups/groupview.html', {'groupname' : group.actual, 'user' : request.user.username, 'chats' : total_msgs, 'len' : len(total_msgs)})
     

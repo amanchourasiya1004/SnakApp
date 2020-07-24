@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
-from .models import Users, ProfilePic
+from .models import Users
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 from django.conf import settings
@@ -79,10 +79,14 @@ def SaveProfilePic(request):
         
         print(request.FILES)
         myfile = request.FILES['data']
-        a = ProfilePic(img = myfile, user = request.user.username)
+        fr = FileSystemStorage()
+        filename = fr.save(myfile.name, myfile)
+        url = fr.url(filename)
+        a = Users.objects.get(username = request.user.username)
+        a.profilepic = url
         a.save()
-        return JsonResponse({'error': False})
-            # return JsonResponse({'error': True})
+        return JsonResponse({'error': False})          # return JsonResponse({'error': True})
+        
     elif(request.method == "POST"):
         
         first = request.POST.get('first')

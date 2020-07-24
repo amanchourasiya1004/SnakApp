@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from .models import PersonalChats, Friends, ImageUpload
 from itertools import chain
 import json
+from users.models import Users
 from usergroups.models import GroupChats, Groups, GroupUsers
 from django.core.files.storage import FileSystemStorage
 
@@ -27,14 +28,14 @@ def HomeView(request):
         else:
             k2 = ''
         if(k1 == '' and k2 != ''):
-            finalchat.append([i.group.groupname, '', k2.time, 1])
+            finalchat.append([i.group.actual, '', k2.time, 1, '#'])
         elif(k1 != '' and k2 == ''):
-            finalchat.append([i.group.groupname, k1.chats, k1.time, 0])
+            finalchat.append([i.group.actual, k1.chats, k1.time, 0, '#'])
         elif(k1 != '' and k2 != ''):
             if(k1.time < k2.time):
-                finalchat.append([i.group.groupname, '', k2.time, 1])
+                finalchat.append([i.group.actual, '', k2.time, 1, '#'])
             else:
-                finalchat.append([i.group.groupname, k1.chats, k1.time, 0])
+                finalchat.append([i.group.actual, k1.chats, k1.time, 0, '#'])
     # Group message section end
 
     # Friends section start
@@ -44,6 +45,7 @@ def HomeView(request):
             name = i.owner.username
         else:
             name = i.friend.username
+        profile = Users.objects.get(username = name).profilepic
         if(len(i.friends.all()) > 0):
             k1 = i.friends.latest('time')
         else:
@@ -53,30 +55,35 @@ def HomeView(request):
         else:
             k2 = ''
         if(k1 == '' and k2 != ''):
-            finalchat.append([name, '', k2.time, 3])
+            finalchat.append([name, '', k2.time, 3, profile])
         elif(k1 != '' and k2 == ''):
-            finalchat.append([name, k1.chat, k1.time, 2])
+            finalchat.append([name, k1.chat, k1.time, 2, profile])
         elif(k1 != '' and k2 != ''):
             if(k1.time < k2.time):
-                finalchat.append([name, '', k2.time, 3])
+                finalchat.append([name, '', k2.time, 3, profile])
             else:
-                finalchat.append([name, k1.chat, k1.time, 2])
+                finalchat.append([name, k1.chat, k1.time, 2, profile])
     # Friends section end
 
     sorted_chat = sorted(finalchat, key=lambda obj: obj[2], reverse=True)
     chat = []
     for i in sorted_chat:
-        chat.append([i[0], i[1], i[3]])
+        chat.append([i[0], i[1], i[3], i[4]])
     length = len(chat)
     chats = json.dumps(chat)
-    return render(request, 'main/home.html', {'chats' : chats, 'length' : length})
+    # personal information section
+    fn = request.user.first_name
+    ln = request.user.last_name
+    nickname = fn[0] + ln[0]
+    fullname = fn + ' ' + ln
+    return render(request, 'main/home.html', {'chats' : chats, 'length' : length, 'username' : request.user.username, 'nickname' : nickname, 'fullname' : fullname, 'email' : request.user.email})
 
 @login_required
 def SearchView(request):
     if(request.is_ajax() and request.method == 'GET'):
         print("workingtill here--------------------------")
         query = request.GET.get('search', None)
-        result = User.objects.filter(username__icontains = query)
+        result = Users.objects.filter(username__icontains = query)
         print(result, "----------------------------------------------------------------------")
         serialize_result = serializers.serialize('json', result)
         return JsonResponse({'result' : serialize_result, 'length' : len(result)}, status = 200)
