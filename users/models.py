@@ -8,3 +8,4 @@ class Users(models.Model):
     password = models.CharField(max_length = 20)
     email = models.EmailField(max_length = 20)
     profilepic = models.TextField(default='-')
+    about = models.TextField(default='-')

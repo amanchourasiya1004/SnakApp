@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
 from itertools import chain
+from users.models import Users
 
 import re
 # Create your views here.
@@ -47,4 +48,22 @@ def GroupView(request, groupname):
     total_msgs = list(chain(chats, images))
     total_msgs = sorted(total_msgs, key=lambda obj: obj.time)
     return render(request, 'groups/groupview.html', {'groupname' : group.actual, 'user' : request.user.username, 'chats' : total_msgs, 'len' : len(total_msgs)})
+
+@login_required
+def Participants(request, name):
+    group = Groups.objects.get(groupname = name)
+    lst = group.groupusers.all()
+    participants = []
+    for i in lst:
+        username = i.user.username
+        user = Users.objects.get(username = username)
+        participants.append([username, user.about, user.profilepic])
+    participants = json.dumps(participants) 
+    return render(request, 'groups/grouparticipants.html', {'participants' : participants})
+
+@login_required
+def GroupInfo(request, name):
+    group = Groups.objects.get(groupname = name)
+    return render(request, 'groups/groupinfo.html', {'username' : group.admin.username, 'numparticipants' : group.num, 'about' : group.description, 'name' : name})
+
     

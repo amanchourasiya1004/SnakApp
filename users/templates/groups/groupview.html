@@ -23,7 +23,14 @@
         </div>
         
             <div class="headicons">
-                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                <div class="dropdown">
+
+                    <i class="fa fa-ellipsis-v" data-toggle = 'dropdown' aria-haspopup="true" aria-expanded="false"></i>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <button class="dropdown-item participants" type="button" >Participants</button>
+                        <button class="dropdown-item groupinfo" type="button" >Group Info</button>
+                    </div>
+                </div>
             </div>
     </nav>
     <div class="message-store">
@@ -32,11 +39,10 @@
                 <div class="emoji">
                     <i class='far fa-grin' style='font-size:24px'></i>
                 </div>
-                <div style="display: inline-block; width: 86%;">
+                <div style="display: inline-block; width: 80%;">
                     <input type="text" class="msg-send" placeholder="Type here..." id = "msg-input">
                 </div>
-                <!-- <i class="fas fa-camera icons"></i>
-                <i class="fa fa-thumbs-up icons" aria-hidden="true"></i>-->
+                
                 <form action = "{%url 'GroupView' groupname %}" id = "imageformupload" method="POST" enctype="multipart/form-data" class="imageform">
                     {% csrf_token %}
                     <label for="imagesent">
@@ -47,6 +53,7 @@
                 <i class="fa fa-paper-plane icons" aria-hidden="true" id = "msg-submit"></i>
             </div>
         </div>
+        
         <div class="message-body" id = "msg-body">
             {% if len == 0 %}
                 <div></div>
@@ -97,13 +104,20 @@
             {% endif %}
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>    
     <script>
         $(document).ready(function(){
+            const groupname = "{{groupname|escapejs}}"
             $(".fa-arrow-left").click(function(){
                 window.location.pathname = '/main/';
             })
-            const groupname = "{{groupname|escapejs}}"
+            $(".participants").click(function(){
+                window.location.pathname = '/groups/' + groupname + '/participants/';
+            })
+            $(".groupinfo").click(function(){
+                window.location.pathname = '/groups/' + groupname + '/info/';
+            })
             var i = 0;
             var me = "{{user|escapejs}}"
             var msgbox = $(".message-body");
@@ -111,8 +125,7 @@
             var username = "{{user|escapejs}}"
             socket.onmessage = function(e){
                 const data = JSON.parse(e.data);
-                console.log(data.sender)
-                console.log(username)
+                
                 if(data.msg_type === 1){
                     if(data.sender == me){
                         msgbox.append(

@@ -126,6 +126,7 @@ body{
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
     transition-delay: 0s;
+    z-index: -1;
 }
 .message-wrap-user{
     box-shadow: 0 15px 35px rgba(50,50,93,.1),0 5px 15px rgba(0,0,0,.07);
@@ -138,6 +139,7 @@ body{
     transition-duration: 1s;
     transition-timing-function: ease;
     transition-delay: 0s;
+    z-index: -1;
 }
 .image-wrap-user{
     display: inline-block; 
@@ -176,5 +178,8 @@ body{
     width: 100% !important;
     max-height: 100%;
     border-radius: 3px;
+}
+.dropdown-item{
+    z-index: 99 !important;
 }
 /* image form styling end */

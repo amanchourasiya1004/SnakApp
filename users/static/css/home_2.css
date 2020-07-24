@@ -19,6 +19,13 @@
     margin-right:  15px;
     margin-top: 4px;
 }
+.group-icon img{
+    width: 67px;
+    height: 67px;
+    border-radius: 50%;
+    margin-right:  15px;
+    margin-top: 4px;
+}
 @media screen and (max-width : 425px){
     .user-data{
         width: 100%;

@@ -135,3 +135,18 @@ def GroupDetails(request):
         return redirect('GroupCreate', groupname = groupname)
     return render(request, 'groups/groupdetail.html')
 
+@login_required
+def ProfileView(request, requestname):
+    a = Users.objects.get(username = requestname)
+    if(request.method == 'POST'):
+        about = request.POST.get('about')
+        a.about = about
+        a.save()
+    b = User.objects.get(username = requestname)
+    fn = b.first_name
+    ln = b.last_name
+    name = fn + ' ' + ln
+    about = a.about
+    src = a.profilepic
+    return render(request, 'main/profile.html', {'img': src, 'requestname' : requestname, 'username' : request.user.username, 'name' : name, 'email' : b.email, 'about' : about})
+

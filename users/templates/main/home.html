@@ -26,8 +26,8 @@
             <div class="utilities">
                 <div class="options newgroup">Create a group</div>
                 <div class="options singleuser">Search a Friend</div>
-                <div class="options">Contribute</div>
-                <div class="options">Your Orders</div>
+                <div class="options viewprofile">View Profile</div>
+                <div class="options">About the developer</div>
                 <div class="options logout">Logout</div>
             </div>
         </div>
@@ -77,9 +77,14 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script>
+        var user = "{{username|escapejs}}"
         $('.fa-bars').click(function(){
             $('.sidebar').css({"width" : '77%'});
         })
+        $('.greenbox').click(function(){
+            window.location.pathname = '/main/profile/' + user + '/view/';
+        })
+        
         document.onclick = function(event){
             if (event===undefined) event= window.event;
             var target= 'target' in event? event.target : event.srcElement;
@@ -105,36 +110,58 @@
         $('.fa-search').click(function(){
             window.location.pathname = '/main/search/username/';
         });
+        $('.viewprofile').click(function(){
+            window.location.pathname = '/main/profile/' + user + '/view/';
+        });
     </script>
     <script>
         var chat = JSON.parse("{{chats|escapejs}}");
         var a = $('.message-box');
         var span;
+        var g = 0;
+        var u = 0;
         for(var i = 0; i < chat.length; i++){
             if(chat[i][2] === 0){
                 a.append(
-                    '<div class="messages d-flex"><span class="user-icon"></span><div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
+                    '<div class="messages d-flex"><span class="group-icon"></span><div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
                 )
+                var x = document.createElement("IMG");
+                x.setAttribute("src", chat[i][3]);
+                span = document.getElementsByClassName("group-icon")[g];
+                span.appendChild(x);
+                g = g + 1;
             }
             else if(chat[i][2] === 1){
                 a.append(
-                    '<div class="messages d-flex"><span class="user-icon"></span><div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">Photo</div></div></div>'
+                    '<div class="messages d-flex"><span class="group-icon"></span><div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">Photo</div></div></div>'
                 )
+                var x = document.createElement("IMG");
+                x.setAttribute("src", chat[i][3]);
+                span = document.getElementsByClassName("group-icon")[g];
+                span.appendChild(x);
+                g = g + 1;
             }
             else if(chat[i][2] == 2){
                 a.append(
                     '<div class="messages d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
                 )
+                var x = document.createElement("IMG");
+                x.setAttribute("src", chat[i][3]);
+                span = document.getElementsByClassName("user-icon")[u];
+                span.appendChild(x);
+                u = u + 1;
             }
             else if(chat[i][2] == 3){
                 a.append(
                     '<div class="messages d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">Photo</div></div></div>'
                 )
+                var x = document.createElement("IMG");
+                x.setAttribute("src", chat[i][3]);
+                span = document.getElementsByClassName("user-icon")[u];
+                span.appendChild(x);
+                u = u + 1;
             }
-            var x = document.createElement("IMG");
-            x.setAttribute("src", chat[i][3]);
-            span = document.getElementsByClassName("user-icon")[i];
-            span.appendChild(x);
+            
         }
         $('.user-data').click(function(){
             var name = $($(this).children($('.user-name'))[0]).text();
@@ -145,6 +172,16 @@
             var groupname = $($(this).children($('.group-name'))[0]).text();
             console.log(groupname)
             window.location.pathname = '/groups/' + groupname + '/chats/';
+        });
+        $('.user-icon').click(function(){
+            var name = $($($(this).parent().children($('.user-name'))[1]).children($('.user-name'))[0]).text();
+            
+            window.location.pathname = '/main/profile/' + name + '/view/';
+        });
+        $('.group-icon').click(function(){
+            var name = $($($(this).parent().children($('.group-name'))[1]).children($('.group-name'))[0]).text();
+            
+            window.location.pathname = '/main/profile/' + name + '/view/';
         });
         
     </script>
