@@ -44,6 +44,15 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
+        window.addEventListener( "pageshow", function ( event ) {
+            var historyTraversal = event.persisted || 
+                                    ( typeof window.performance != "undefined" && 
+                                        window.performance.navigation.type === 2 );
+            if ( historyTraversal ) {
+                // Handle page restore.
+                window.location.pathname = '/main/'
+            }
+        });
         const me = "{{me|escapejs}}";
         console.log(me);
         function personal(e){
@@ -65,7 +74,6 @@
                     $('.search-result').empty();
                     for(var i = 0; i < queryset.length; i++){
                         name = queryset[i]['fields']['username'];
-                        console.log("kyi")
                         if(name == me){
                             continue;
                         }

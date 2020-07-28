@@ -17,9 +17,9 @@
         <div class="hamburger d-flex">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
             <span class="user-icon">
-                <img class="rounded-circle" src="{% static 'images/user-profile/avatar-dhg.png' %}">
+                <img class="rounded-circle" src={{pic}}>
             </span>
-            <div class="brand">{{groupname}}</div>
+            <div class="brand">{{actual}}</div>
         </div>
         
             <div class="headicons">
@@ -108,6 +108,15 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>    
     <script>
         $(document).ready(function(){
+            window.addEventListener( "pageshow", function ( event ) {
+                var historyTraversal = event.persisted || 
+                                        ( typeof window.performance != "undefined" && 
+                                            window.performance.navigation.type === 2 );
+                if ( historyTraversal ) {
+                    // Handle page restore.
+                    window.location.reload();
+                }
+            });
             const groupname = "{{groupname|escapejs}}"
             $(".fa-arrow-left").click(function(){
                 window.location.pathname = '/main/';

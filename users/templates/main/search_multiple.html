@@ -32,6 +32,15 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
+        window.addEventListener( "pageshow", function ( event ) {
+            var historyTraversal = event.persisted || 
+                                    ( typeof window.performance != "undefined" && 
+                                        window.performance.navigation.type === 2 );
+            if ( historyTraversal ) {
+                // Handle page restore.
+                window.location.pathname = '/main/'
+            }
+        });
         const me = "{{me|escapejs}}";
         var addedparticipants = []
         function personal(e){
@@ -72,6 +81,7 @@
                 data : {'search' : query},
                 success : function(response){
                     var span;
+                    var t = 0;
                     var queryset = JSON.parse(response['result']);
                     $('.search-result').empty();
                     for(var i = 0; i < queryset.length; i++){
@@ -84,7 +94,8 @@
                         );
                         var x = document.createElement("IMG");
                         x.setAttribute("src", queryset[i]['fields']['profilepic']);
-                        spanelem = document.getElementsByClassName("user-icon")[i];
+                        spanelem = document.getElementsByClassName("user-icon")[t];
+                        t = t + 1;
                         spanelem.appendChild(x);
                     }
                     if(response['length'] == 0){

@@ -17,7 +17,7 @@
         <div class="hamburger d-flex">
             <i class="fa fa-arrow-left" aria-hidden="true"></i>
             <span class="user-icon">
-                <img class="rounded-circle" src="{% static 'images/user-profile/avatar-dhg.png' %}">
+                <img class="rounded-circle" src={{pic}}>
             </span>
             <div class="brand">{{otheruser}}</div>
         </div>
@@ -102,6 +102,15 @@
 
     <script>
         $(document).ready(function(){
+            window.addEventListener( "pageshow", function ( event ) {
+                var historyTraversal = event.persisted || 
+                                        ( typeof window.performance != "undefined" && 
+                                            window.performance.navigation.type === 2 );
+                if ( historyTraversal ) {
+                    // Handle page restore.
+                    window.location.reload();
+                }
+            });
         var messages = document.getElementById("msg-body");
         function scrollToBottom() {
             messages.scrollTop = messages.scrollHeight;

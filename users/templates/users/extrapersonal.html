@@ -55,7 +55,15 @@
 
     </script>
     <script>
-
+        window.addEventListener( "pageshow", function ( event ) {
+            var historyTraversal = event.persisted || 
+                                    ( typeof window.performance != "undefined" && 
+                                        window.performance.navigation.type === 2 );
+            if ( historyTraversal ) {
+                // Handle page restore.
+                window.location.pathname = '/main/'
+            }
+        });
         var check1 = false;
         var check2 = false;
         var formSignup = $('.form');

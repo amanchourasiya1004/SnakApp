@@ -19,10 +19,11 @@ def GroupCreate(request, groupname):
     grouplist = request.user.creator.filter(groupname = x)
     if(len(grouplist) == 0):
         participants = request.session['groupParticipants']
-        a = Groups.objects.create(actual = groupname, admin = request.user, groupname = x, num = len(participants), participants = str(participants))
+        url = request.session['url']
+        a = Groups.objects.create(actual = groupname, admin = request.user, groupname = x, num = len(participants), participants = str(participants), groupic = url)
         for user in participants:
             GroupUsers.objects.create(group = a, user = User.objects.get(username = user))
-        return render(request, 'groups/groupview.html', {'groupname' : x, 'user' : request.user.username, 'chats' : [] ,'len' : 0})
+        return redirect('GroupView', groupname)
     else:
         return HttpResponse("Already exists")
 def GroupView(request, groupname):
@@ -30,6 +31,7 @@ def GroupView(request, groupname):
     p = ''
     x = p.join(x)  
     group = Groups.objects.get(groupname = x)
+    pic = group.groupic
     if request.method == 'POST':
         try:
             print(request.FILES)
@@ -47,7 +49,7 @@ def GroupView(request, groupname):
     images = group.sentimages.all()
     total_msgs = list(chain(chats, images))
     total_msgs = sorted(total_msgs, key=lambda obj: obj.time)
-    return render(request, 'groups/groupview.html', {'groupname' : group.actual, 'user' : request.user.username, 'chats' : total_msgs, 'len' : len(total_msgs)})
+    return render(request, 'groups/groupview.html', {'actual' : groupname, 'groupname' : x, 'user' : request.user.username, 'chats' : total_msgs, 'len' : len(total_msgs), 'pic' : pic})
 
 @login_required
 def Participants(request, name):
@@ -64,6 +66,7 @@ def Participants(request, name):
 @login_required
 def GroupInfo(request, name):
     group = Groups.objects.get(groupname = name)
-    return render(request, 'groups/groupinfo.html', {'username' : group.admin.username, 'numparticipants' : group.num, 'about' : group.description, 'name' : name})
+    pic = group.groupic
+    return render(request, 'groups/groupinfo.html', {'username' : group.admin.username, 'numparticipants' : group.num, 'about' : group.description, 'name' : name, 'img' : pic})
 
     

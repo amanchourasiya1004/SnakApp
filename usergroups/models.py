@@ -10,6 +10,7 @@ class Groups(models.Model):
     num = models.IntegerField(default=0)
     description = models.CharField(max_length = 50, default='-')
     participants = models.TextField(default='-')
+    groupic = models.TextField(default='-')
     
     class Meta:
         verbose_name_plural = 'Groups'

@@ -28,14 +28,14 @@ def HomeView(request):
         else:
             k2 = ''
         if(k1 == '' and k2 != ''):
-            finalchat.append([i.group.actual, '', k2.time, 1, '#'])
+            finalchat.append([i.group.actual, '', k2.time, 1, i.group.groupic])
         elif(k1 != '' and k2 == ''):
-            finalchat.append([i.group.actual, k1.chats, k1.time, 0, '#'])
+            finalchat.append([i.group.actual, k1.chats, k1.time, 0, i.group.groupic])
         elif(k1 != '' and k2 != ''):
             if(k1.time < k2.time):
-                finalchat.append([i.group.actual, '', k2.time, 1, '#'])
+                finalchat.append([i.group.actual, '', k2.time, 1, i.group.groupic])
             else:
-                finalchat.append([i.group.actual, k1.chats, k1.time, 0, '#'])
+                finalchat.append([i.group.actual, k1.chats, k1.time, 0, i.group.groupic])
     # Group message section end
 
     # Friends section start
@@ -45,6 +45,7 @@ def HomeView(request):
             name = i.owner.username
         else:
             name = i.friend.username
+        print(name, 'name ---------------------------------------------------------')
         profile = Users.objects.get(username = name).profilepic
         if(len(i.friends.all()) > 0):
             k1 = i.friends.latest('time')
@@ -91,6 +92,7 @@ def SearchView(request):
 
 @login_required
 def personalChatView(request, name):
+    pic = Users.objects.get(username = name).profilepic
     arr = [request.user.username, name]
     arr.sort()
     if(len(Friends.objects.filter(owner__username = arr[0], friend__username = arr[1])) == 0):
@@ -116,7 +118,7 @@ def personalChatView(request, name):
             return JsonResponse({'error': False, 'path': url})
         except:
             return JsonResponse({'error': True})
-    return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : total_msgs, 'length' : len(total_msgs)})
+    return render(request, 'main/personalchat.html', {'otheruser' : name, 'me' : request.user.username, 'msgs' : total_msgs, 'length' : len(total_msgs), 'pic' : pic})
 
 @login_required
 def GroupParticipants(request):
@@ -130,9 +132,20 @@ def GroupParticipants(request):
 
 @login_required
 def GroupDetails(request):
-    if(request.method == 'POST'):
-        groupname = request.POST.get('groupname')
-        return redirect('GroupCreate', groupname = groupname)
+
+    if (request.method == 'POST' and request.is_ajax()):
+        
+        print(request.FILES)
+        myfile = request.FILES['data']
+        fr = FileSystemStorage()
+        filename = fr.save(myfile.name, myfile)
+        url = fr.url(filename)
+        request.session['url'] = url
+        return JsonResponse({'error': False})          # return JsonResponse({'error': True})
+        
+    elif(request.method == "POST"):
+        first = request.POST.get('first')
+        return redirect('GroupCreate', groupname = first)
     return render(request, 'groups/groupdetail.html')
 
 @login_required
