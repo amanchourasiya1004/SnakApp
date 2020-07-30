@@ -12,14 +12,17 @@
     height: 95px;
     position: relative;
 }
-.user-icon img{
+.user-icon img, .user-icon{
     width: 67px;
     height: 67px;
     border-radius: 50%;
     margin-right:  15px;
     margin-top: 4px;
 }
-.group-icon img{
+.additional{
+    background-color: #e8e8e8;
+}
+.group-icon img, .group-icon{
     width: 67px;
     height: 67px;
     border-radius: 50%;

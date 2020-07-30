@@ -9,8 +9,7 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link rel="stylesheet" href="{% static 'css/home_2.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+   
     <title>Main</title>
 </head>
 <body>
@@ -34,12 +33,21 @@
     </div>
     <nav class="navbar bg-custom navbar-expand-xs fixed-top navbar-default">
         <div class="hamburger d-flex">
-            <i class="fa fa-bars" aria-hidden="true"></i>
+            <div>
+                <svg class = 'bars' width="2em" height="2em" viewBox="0 0 16 16" fill="#fff">
+                    <path fill-rule="evenodd" d="M5.5 2A3.5 3.5 0 0 0 2 5.5v5A3.5 3.5 0 0 0 5.5 14h5a3.5 3.5 0 0 0 3.5-3.5V8a.5.5 0 0 1 1 0v2.5a4.5 4.5 0 0 1-4.5 4.5h-5A4.5 4.5 0 0 1 1 10.5v-5A4.5 4.5 0 0 1 5.5 1H8a.5.5 0 0 1 0 1H5.5z"/>
+                    <path d="M16 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                </svg>
+            </div>
             <div class="brand">SnakApp</div>
         </div>
         
             <div class="headicons">
-                <i class="fa fa-search align-self-center" aria-hidden="true"></i>
+                <!-- <i class="fa fa-search align-self-center" aria-hidden="true"></i> -->
+                <svg class="fa-search align-self-center" width="1.6em" height="1.6em" viewBox="0 0 16 16" class="bi bi-search" fill="#fff">
+                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                </svg>
             </div>
     </nav>
 
@@ -87,9 +95,6 @@
             }
         });
         var user = "{{username|escapejs}}"
-        $('.fa-bars').click(function(){
-            $('.sidebar').css({"width" : '77%'});
-        })
         $('.greenbox').click(function(){
             window.location.pathname = '/main/profile/' + user + '/view/';
         })
@@ -97,7 +102,10 @@
         document.onclick = function(event){
             if (event===undefined) event= window.event;
             var target= 'target' in event? event.target : event.srcElement;
-            if(target.className != 'sidebar' && target.className != 'hamburger d-flex' && target.className != 'fa fa-bars'){
+            if(target.className == '[object SVGAnimatedString]'){
+                $('.sidebar').css({"width" : '77%'});
+            }
+            if(target.className != 'sidebar' && target.className != 'hamburger d-flex' && target.className != '[object SVGAnimatedString]'){
                 $('.sidebar').css({"width" : '0%'});
             }
         }
@@ -134,40 +142,60 @@
                 a.append(
                     '<div class="messages d-flex"><span class="group-icon"></span><div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
                 )
-                var x = document.createElement("IMG");
-                x.setAttribute("src", chat[i][3]);
-                span = document.getElementsByClassName("group-icon")[g];
-                span.appendChild(x);
+                if(chat[i][3] != '-'){
+                    var x = document.createElement("IMG");
+                    x.setAttribute("src", chat[i][3]);
+                    span = document.getElementsByClassName("group-icon")[g];
+                    span.appendChild(x);
+                }
+                else{
+                    $($(".group-icon")[g]).css({'background' : '#e8e8e8'});
+                }
                 g = g + 1;
             }
             else if(chat[i][2] === 1){
                 a.append(
                     '<div class="messages d-flex"><span class="group-icon"></span><div class="group-data align-self-start"><div class="group-name">' + chat[i][0] + '</div><div class="lastmsg">Photo</div></div></div>'
                 )
-                var x = document.createElement("IMG");
-                x.setAttribute("src", chat[i][3]);
-                span = document.getElementsByClassName("group-icon")[g];
-                span.appendChild(x);
+                if(chat[i][3] != '-'){
+                    var x = document.createElement("IMG");
+                    x.setAttribute("src", chat[i][3]);
+                    span = document.getElementsByClassName("group-icon")[g];
+                    span.appendChild(x);
+                }
+                else{
+                    $($(".group-icon")[g]).css({'background' : '#e8e8e8'});
+                }
                 g = g + 1;
             }
             else if(chat[i][2] == 2){
                 a.append(
                     '<div class="messages d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">' + chat[i][1] + '</div></div></div>'
                 )
-                var x = document.createElement("IMG");
-                x.setAttribute("src", chat[i][3]);
-                span = document.getElementsByClassName("user-icon")[u];
-                span.appendChild(x);
+                if(chat[i][3] != '-'){
+                    var x = document.createElement("IMG");
+                    x.setAttribute("src", chat[i][3]);
+                    span = document.getElementsByClassName("user-icon")[u];
+                    span.appendChild(x);
+                }
+                else{
+                    $($(".user-icon")[u]).css({'background' : '#e8e8e8'});
+                }
                 u = u + 1;
             }
             else if(chat[i][2] == 3){
                 a.append(
                     '<div class="messages d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + chat[i][0] + '</div><div class="lastmsg">Photo</div></div></div>'
                 )
-                var x = document.createElement("IMG");
-                x.setAttribute("src", chat[i][3]);
-                span = document.getElementsByClassName("user-icon")[u];
-                span.appendChild(x);
+                if(chat[i][3] != '-'){
+                    var x = document.createElement("IMG");
+                    x.setAttribute("src", chat[i][3]);
+                    span = document.getElementsByClassName("user-icon")[u];
+                    span.appendChild(x);
+                }
+                else{
+                    $($(".user-icon")[u]).css({'background' : '#e8e8e8'});
+                }
                 u = u + 1;
             }
             
@@ -175,22 +203,38 @@
         $('.user-data').click(function(){
             var name = $($(this).children($('.user-name'))[0]).text();
             console.log(name)
-            window.location.pathname = '/main/personalchat/' + name + '/';
+            if($('.sidebar').css('width') != '0px'){
+                $('.sidebar').css({"width" : '0%'});
+            }
+            else{
+                window.location.pathname = '/main/personalchat/' + name + '/';
+            }
         });
         $('.group-data').click(function(){
             var groupname = $($(this).children($('.group-name'))[0]).text();
             console.log(groupname)
-            window.location.pathname = '/groups/' + groupname + '/chats/';
+            
+            if($('.sidebar').css('width') != '0px'){
+                $('.sidebar').css({"width" : '0%'});
+            }
+            else{
+                window.location.pathname = '/groups/' + groupname + '/chats/';
+            }
         });
         $('.user-icon').click(function(){
             var name = $($($(this).parent().children($('.user-name'))[1]).children($('.user-name'))[0]).text();
+            if($('.sidebar').css('width') != '0px'){
+                $('.sidebar').css({"width" : '0%'});
+            }
+            else{
+                window.location.pathname = '/main/profile/' + name + '/view/';
+            }
             
-            window.location.pathname = '/main/profile/' + name + '/view/';
         });
         $('.group-icon').click(function(){
             var name = $($($(this).parent().children($('.group-name'))[1]).children($('.group-name'))[0]).text();
             
-            window.location.pathname = '/main/profile/' + name + '/view/';
+            window.location.pathname = '/groups/' + name + '/info/';
         });
         
     </script>

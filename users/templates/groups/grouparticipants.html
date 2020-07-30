@@ -9,13 +9,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Muli&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/grouparticipants.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
     <nav class="navbar bg-custom navbar-expand-xs fixed-top navbar-default">
         <div class="hamburger d-flex">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            <svg class="arrow-left" width="2.2em" height="2.2em" viewBox="0 0 16 16" class="bi bi-arrow-left-short" fill="#fff">
+                <path fill-rule="evenodd" d="M7.854 4.646a.5.5 0 0 1 0 .708L5.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h6.5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
+            </svg>
             <div class="brand">Group Participants</div>
         </div>
         
@@ -25,7 +27,9 @@
         
     </div>
     <script>
-        
+        $(".arrow-left").click(function(){
+            window.location.pathname = '/main/';
+        })
         var participants = JSON.parse("{{participants|escapejs}}");
         console.log(participants);
         var a = $('.participants');
@@ -34,10 +38,15 @@
             a.append(
                 '<div class="results d-flex"><span class="user-icon"></span><div class="user-data align-self-start"><div class="user-name">' + participants[i][0] + '</div><div class="mood">' + participants[i][1] + '</div></div></div>'
             )
-            var x = document.createElement("IMG");
-            x.setAttribute("src", participants[i][2]);
-            span = document.getElementsByClassName("user-icon")[i];
-            span.appendChild(x);
+            if(participants[i][2] != '-'){
+                var x = document.createElement("IMG");
+                x.setAttribute("src", participants[i][2]);
+                span = document.getElementsByClassName("user-icon")[i];
+                span.appendChild(x);
+            }
+            else{
+                $($(".user-icon")[i]).css({'background' : '#e8e8e8'});
+            }
         }
         $('.user-data').click(function(){
             var name = $($(this).children($('.user-name'))[0]).text();

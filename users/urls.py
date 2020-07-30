@@ -6,5 +6,4 @@ urlpatterns = [
     path('logout/', views.LogoutView, name = 'LogoutView'),
     path('extrainfo/', views.SaveProfilePic, name = 'SaveProfilePic'),
     path('login/', views.LoginView, name = 'LoginView'),
-    path('confirmation/', views.ConfirmEmailView, name='ConfirmEmailView'),
 ]

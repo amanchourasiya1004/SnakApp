@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="{% static 'css/search_multiple.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <div class='search-container d-flex justify-content-center'>
         <div class="iconwrap d-flex">
-            <i class="fa fa-search align-self-center" aria-hidden="true"></i>
+            
+            <svg class="fa-search align-self-center" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="#000">
+                <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+            </svg>
             <form action="{% url 'SearchView' %}" id = "searchform" class="form">
                 <input type="text" placeholder="Search by Username" class="align-self-center search-res" id="search">
             </form>
@@ -92,11 +95,16 @@
                         $('.search-result').append(
                             '<div class="results d-flex"><span class="user-icon"></span><div class="user-data align-self-start" onclick="personal(this)"><div class="user-name">' + name + '</div><div class="mood">Hey there I am using SnakApp</div></div></div>'
                         );
-                        var x = document.createElement("IMG");
-                        x.setAttribute("src", queryset[i]['fields']['profilepic']);
-                        spanelem = document.getElementsByClassName("user-icon")[t];
+                        if(queryset[i]['fields']['profilepic'] != '-'){
+                            var x = document.createElement("IMG");
+                            x.setAttribute("src", queryset[i]['fields']['profilepic']);
+                            spanelem = document.getElementsByClassName("user-icon")[t];
+                            spanelem.appendChild(x);
+                        }
+                        else{
+                            $($(".user-icon")[t]).css({'background' : '#e8e8e8'});
+                        }
                         t = t + 1;
-                        spanelem.appendChild(x);
                     }
                     if(response['length'] == 0){
                         $('.search-result').append(

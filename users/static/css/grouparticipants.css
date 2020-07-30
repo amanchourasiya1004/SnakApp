@@ -36,7 +36,7 @@
     height: 80px;
     position: relative;
 }
-.user-icon img{
+.user-icon img, .user-icon{
     width: 62px;
     height: 62px;
     border-radius: 50%;

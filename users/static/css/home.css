@@ -18,11 +18,8 @@ body{
     color: white;
     z-index: 100;
 }
-.fa-search{
-    font-size: 25px !important;
-    color: white;
+.bars{
     display: inline;
-    margin-right: 6px;
 }
 .fa-bars{
     font-size: 29px !important;

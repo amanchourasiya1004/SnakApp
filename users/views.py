@@ -18,31 +18,6 @@ def RegisterView(request):
         email = request.POST.get('email')
         password1 = request.POST.get('password')
         if len(User.objects.filter(username=uname)) == 0 and len(User.objects.filter(email=email)) == 0:
-            code = str(random.randint(1000, 10000))
-            to_email = email
-            send_mail(
-                'sender_mail', 
-                code,
-                'amanchourasiya1004@gmail.com',
-                [to_email], 
-                fail_silently=False,
-            )
-            request.session['code'] = code
-            request.session['name'] = uname
-            request.session['email'] = email
-            request.session['pass'] = password1
-            return redirect('ConfirmEmailView')
-        else:
-            return HttpResponse('Username already taken. Try another.')
-    return render(request, 'users/register.html')
-
-def ConfirmEmailView(request):
-    if request.method == 'POST':
-        code = request.POST.get('code')
-        if code == request.session['code']:      
-            uname = request.session['name']
-            password1 = request.session['pass']
-            email = request.session['email']
             hashed_pwd = make_password(password1)
             Users.objects.create(username = uname, email = email , password = hashed_pwd)
             user = User.objects.create_user(username=uname,email=email,password=password1)
@@ -51,8 +26,8 @@ def ConfirmEmailView(request):
             login(request, user)
             return redirect("SaveProfilePic")
         else:
-            return render(request, 'users/confirm_email.html', {'msg' : 'Wrong PIN. Try again..'})
-    return render(request, 'users/confirm_email.html', {'msg' : ''})
+            return render(request, 'users/register.html', {'error' : 'hai'})
+    return render(request, 'users/register.html', {'error' : '-'})
 
 def LoginView(request):
     if(request.user.is_authenticated):

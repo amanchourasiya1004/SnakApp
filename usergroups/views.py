@@ -65,7 +65,10 @@ def Participants(request, name):
 
 @login_required
 def GroupInfo(request, name):
-    group = Groups.objects.get(groupname = name)
+    x = re.findall("[A-Za-z0-9]", name)
+    p = ''
+    x = p.join(x)  
+    group = Groups.objects.get(groupname = x)
     pic = group.groupic
     return render(request, 'groups/groupinfo.html', {'username' : group.admin.username, 'numparticipants' : group.num, 'about' : group.description, 'name' : name, 'img' : pic})
 

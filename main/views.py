@@ -145,6 +145,10 @@ def GroupDetails(request):
         
     elif(request.method == "POST"):
         first = request.POST.get('first')
+        try:
+            print(request.session['url'])
+        except:
+            request.session['url'] = '-'
         return redirect('GroupCreate', groupname = first)
     return render(request, 'groups/groupdetail.html')
 

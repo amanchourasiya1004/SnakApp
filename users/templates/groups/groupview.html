@@ -8,27 +8,34 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Muli" />
     <link rel="stylesheet" href="{% static 'css/personalchat.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <title>GroupChat</title>
 </head>
 <body>
     <nav class="navbar bg-custom navbar-expand-xs fixed-top navbar-default">
         <div class="hamburger d-flex">
-            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            <svg class="arrow-left" width="2.2em" height="2.2em" viewBox="0 0 16 16" class="bi bi-arrow-left-short" fill="#fff">
+                <path fill-rule="evenodd" d="M7.854 4.646a.5.5 0 0 1 0 .708L5.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+                <path fill-rule="evenodd" d="M4.5 8a.5.5 0 0 1 .5-.5h6.5a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/>
+            </svg>
             <span class="user-icon">
-                <img class="rounded-circle" src={{pic}}>
+                {% if pic == '-'%}
+                <div class="rounded-circle"></div>
+                {% else %}
+                    <img class="rounded-circle" src={{pic}}>
+                {% endif %}
             </span>
             <div class="brand">{{actual}}</div>
         </div>
         
             <div class="headicons">
                 <div class="dropdown">
-
-                    <i class="fa fa-ellipsis-v" data-toggle = 'dropdown' aria-haspopup="true" aria-expanded="false"></i>
+                    
+                        <svg width="1.7em" height="1.7em" viewBox="0 0 16 16" class="dots" fill="#fff" data-toggle = 'dropdown' aria-haspopup="true" aria-expanded="false">
+                            <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                          </svg>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button class="dropdown-item participants" type="button" >Participants</button>
-                        <button class="dropdown-item groupinfo" type="button" >Group Info</button>
+                        
                     </div>
                 </div>
             </div>
@@ -37,7 +44,11 @@
         <div class="msg-input-div">
             <div class="msg-send-box">
                 <div class="emoji">
-                    <i class='far fa-grin' style='font-size:24px'></i>
+                    <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="#000">
+                        <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path fill-rule="evenodd" d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683z"/>
+                        <path d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+                      </svg>
                 </div>
                 <div style="display: inline-block; width: 80%;">
                     <input type="text" class="msg-send" placeholder="Type here..." id = "msg-input">
@@ -45,13 +56,16 @@
                 
                 <form action = "{%url 'GroupView' groupname %}" id = "imageformupload" method="POST" enctype="multipart/form-data" class="imageform">
                     {% csrf_token %}
-                    <label for="imagesent">
-                        <i class="fas fa-camera icons"></i>        
-                    </label>
+                    <label for="imagesent" class="send">
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="#000">
+                            <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                            <path fill-rule="evenodd" d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+                          </svg>                      </label>
                     <input type='file' id="imagesent" accept="image/*" name = "image" class="imageupload"/>
                 </form>
-                <i class="fa fa-paper-plane icons" aria-hidden="true" id = "msg-submit"></i>
-            </div>
+                <svg class="send" id = "msg-submit" width="1.3em" height="1.3em" viewBox="0 0 16 16" class="bi bi-chat-right-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M14 0a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z"/>
+                </svg>            </div>
         </div>
         
         <div class="message-body" id = "msg-body">
@@ -118,7 +132,7 @@
                 }
             });
             const groupname = "{{groupname|escapejs}}"
-            $(".fa-arrow-left").click(function(){
+            $(".arrow-left").click(function(){
                 window.location.pathname = '/main/';
             })
             $(".participants").click(function(){

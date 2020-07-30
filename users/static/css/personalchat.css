@@ -23,17 +23,13 @@ body{
     display: inline-block;
     color: white;
 }
-.fa-ellipsis-v{
-    font-size: 25px !important;
+.dots{
     color: white;
     display: inline;
     margin-right: 6px;
 }
-.fa-arrow-left{
-    font-size: 23px !important;
-    color: white;
-    margin-top: 7px;
-    margin-right: 2px;
+.arrow-left{
+    margin-left: -10px;
 }
 .hamburger{
     display: inline;
@@ -82,6 +78,10 @@ body{
     background: transparent;
     border: none;
     outline: none;
+}
+.send{
+    margin-right: 8px !important;
+    display: inline !important;
 }
 .icons{
     margin-right: 12px;
@@ -170,6 +170,7 @@ body{
 }
 .imageupload{
     display: none !important;
+    margin-right: 10px;
 }
 .imagemsg{
     width: 100%;

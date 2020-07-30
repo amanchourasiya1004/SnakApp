@@ -32,7 +32,7 @@
             </div>
             <div class="form-group extra">
                 <label class="form-label" for="last">Last Name</label>
-                <input id="last" class="form-input" type="password" name='last' required/>
+                <input id="last" class="form-input" type="text" name='last' required/>
             </div>
             <button type="submit" class="btn-done">Done</button>
         </form>
@@ -70,7 +70,7 @@
         $(".form-input").keyup(function(){
             var identify = $(this).attr("id");
             if(identify === "first"){
-                if($(this).val().length <= 3){
+                if($(this).val().length != ''){
                     $(this).css({"box-shadow" : "0 1px 0 0 #ce1f3b"});
                     check1 = false;
                 }
@@ -80,7 +80,7 @@
                 }
             }
             else if(identify === "last"){
-                if($(this).val().length <= 4){
+                if($(this).val().length != ''){
                     $(this).css({"box-shadow" : "0 1px 0 0 #ce1f3b"});
                     check2 = false;
                 }

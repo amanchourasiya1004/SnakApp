@@ -95,3 +95,10 @@ body{
 .form-input .filled {
     box-shadow: 0 2px 0 0 lightgreen;
 }
+.error-email,.error-username{
+    color: red;
+    font-size: 14px;
+    margin: 4px auto;
+    width: 100%;
+    text-align: center;
+}
