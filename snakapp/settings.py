@@ -141,7 +141,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media 2')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media2')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
